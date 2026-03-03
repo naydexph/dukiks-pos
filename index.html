@@ -265,8 +265,11 @@ async function fetchMenu() {
   const menuSheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSa7lcRIlEfObIPUvMPgCyonedYt367Rmgun_QpBRvWjkp4RyDMKy_io1d8wrnEvgJG7rufwuKrANlH/pub?gid=0&single=true&output=csv"; 
 
   try {
-    const response = await fetch(menuSheetURL, { cache: "no-store" });
-    if (!response.ok) throw new Error('Network response error');
+    // Adding a timestamp to the URL forces Google to give us the newest data
+    const finalURL = menuSheetURL + "&t=" + new Date().getTime();
+    const response = await fetch(finalURL);
+    
+    if (!response.ok) throw new Error('Failed to connect');
     
     const csvData = await response.text();
     const rows = csvData.split(/\r?\n/).filter(row => row.trim() !== "");
@@ -286,10 +289,13 @@ async function fetchMenu() {
   } catch (error) {
     console.error("Menu load failed:", error);
     document.getElementById("menuDisplayBody").innerHTML = 
-      "<tr><td colspan='4' style='color:red; text-align:center; font-weight:bold; padding:20px;'>⚠️ Error loading Menu Database. Please refresh the page</td></tr>";
+      `<tr><td colspan="4" style="color:red; text-align:center; font-weight:bold; padding:20px;">
+        ⚠️ Error loading Menu Database. Please refresh the page<br>
+        <button onclick="fetchMenu()" style="margin-top:10px; padding:5px 15px; cursor:pointer;">Retry Now</button>
+      </td></tr>`;
   }
 }
-
+  
 function renderMenuDisplay() {
   const body = document.getElementById("menuDisplayBody");
   body.innerHTML = ""; 
