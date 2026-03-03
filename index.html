@@ -280,7 +280,7 @@ td { color: black; border-bottom: 1px solid #eee; }
   </table>
 
   <button class="action-btn" id="startNewOrderBtn">Log Order & Clear</button>
-<small style="display:block; text-align:center; color:#666; margin-top:-10px; margin-bottom:20px; font-size: 14px; font-weight: normal;">
+<small style="display:block; text-align:center; color:#C2C2C2; margin-top:-10px; margin-bottom:20px; font-size: 14px; font-weight: normal;">
   This button saves the order to history, clears the form, and generates a unique Reference Number.
 </small>
 </div>
@@ -295,7 +295,7 @@ td { color: black; border-bottom: 1px solid #eee; }
   </div>
 
 <button class="action-btn" id="copyTableBtn">⧉ Copy Table</button>
-<small style="display:block; text-align:center; color:#666; margin-top:-10px; margin-bottom:20px; font-size: 14px; font-weight: normal;">
+<small style="display:block; text-align:center; color:#C2C2C2; margin-top:-10px; margin-bottom:20px; font-size: 14px; font-weight: normal;">
   This button copies the table below to your clipboard and automatically opens The Sales Log Google Sheet for easy pasting.
 </small>
 
@@ -324,6 +324,9 @@ td { color: black; border-bottom: 1px solid #eee; }
 </div>
 
 <button class="action-btn" id="newDayBtn" onclick="startNewDay()">Start a New Day</button>
+<small style="display:block; text-align:center; color:#FFFFFF; margin-top:-10px; margin-bottom:20px; font-size: 14px; font-weight: bold;">
+  ⚠️ Warning: This button will permanently delete all order history and reset the day.
+</small>
 
 <script>
 const menuData = [
