@@ -67,7 +67,7 @@ td { color: black; border-bottom: 1px solid #eee; }
 
 <div class="panel white-panel">
   <h2>Order Intake</h2>
-  <div id="validationError" class="error-msg">⚠️ Check Name, Address, or Block/Lot!</div>
+  <div id="validationError" class="error-msg">⚠️ Please check Name, Items, or Block/Lot!</div>
   
   <div class="input-row">
     <label>Name</label>
@@ -204,11 +204,11 @@ td { color: black; border-bottom: 1px solid #eee; }
   <div id="subdivisionGroup" class="hidden-field">
     <div class="input-row">
       <label>Block/Floor#</label>
-      <input type="text" id="blockFloor" placeholder="Numbers only" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+      <input type="text" id="blockFloor" placeholder="Numbers only">
     </div>
     <div class="input-row">
       <label>Lot/Room#</label>
-      <input type="text" id="lotRoom" placeholder="Numbers only" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+      <input type="text" id="lotRoom" placeholder="Numbers only">
     </div>
   </div>
 
@@ -253,10 +253,9 @@ td { color: black; border-bottom: 1px solid #eee; }
     </table>
 </div>
 
-<button class="action-btn" id="newDayBtn" onclick="startNewDay()" style="background: #ff3b30; width: 150px; font-size: 14px;">Start a New Day</button>
+<button class="action-btn" id="newDayBtn" onclick="startNewDay()" style="width: 150px; font-size: 14px;">Start a New Day</button>
 
 <script>
-// --- PERMANENT MENU DATA ---
 const menuData = [
   { type: "Meal", menu: "Pork Steak with rice", code: "PSWR", price: 149.00 },
   { type: "Meal", menu: "Fried Chicken with rice", code: "FCWR", price: 109.00 },
@@ -281,7 +280,6 @@ window.onload = () => {
   renderMenuDisplay();
   updateClock();
   toggleAddressFields();
-  
   if(localStorage.getItem("dukiks_history")) {
     historyBox.innerHTML = localStorage.getItem("dukiks_history");
     historyBox.querySelectorAll('tr').forEach(row => {
@@ -379,13 +377,13 @@ function updateSummary() {
 document.getElementById("startNewOrderBtn").onclick = function() {
   const errorMsg = document.getElementById("validationError");
   const rows = orderBody.querySelectorAll("tr:not(#grandTotalRow)");
-  let orders = []; let total = 0; let hasItem = false;
-
-  // Validation Logic
+  
+  // Validation
   const isHome = commInp.value === "Home";
   const nameOk = nameInp.value.trim() !== "";
   const addressOk = isHome ? addrInp.value.trim() !== "" : (blkInp.value.trim() !== "" && lotInp.value.trim() !== "");
-
+  
+  let orders = []; let total = 0; let hasItem = false;
   rows.forEach(r => {
     const code = r.querySelector("select").value;
     const qty = r.querySelector("input").value;
@@ -394,95 +392,54 @@ document.getElementById("startNewOrderBtn").onclick = function() {
   });
 
   if(!nameOk || !addressOk || !hasItem) { 
-    errorMsg.style.display = "block"; 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    return; 
+    errorMsg.style.display = "block"; return; 
   } 
   errorMsg.style.display = "none";
 
   const now = new Date();
-  const dateCode = (now.getMonth() + 1).toString().padStart(2, '0') + now.getDate().toString().padStart(2, '0') + now.getFullYear().toString().slice(-2);
-  const refNum = `#DHK-${dateCode}${orderCounter}`;
+  const refNum = `#${orderCounter++}`;
   let fullAddress = isHome ? addrInp.value : `${commInp.value} B${blkInp.value} L${lotInp.value}`;
 
   const hRow = document.createElement("tr");
   hRow.innerHTML = `
-    <td style="font-weight:bold; color:#ff6b00;">${refNum}</td>
-  <td>${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()}</td>
-  <td>${now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true})}</td>
+    <td>${refNum}</td>
+    <td>${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()}</td>
+    <td>${now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true})}</td>
     <td>${nameInp.value}</td>
     <td>${fullAddress}</td>
-    <td style="font-weight:bold;">₱${formatPHP(total)}</td>
+    <td>₱${formatPHP(total)}</td>
     <td>${orders.join(", ")}</td>
     <td>${document.getElementById("specialInstructions").value || '-'}</td>
     <td><select class="history-select" data-val="Unpaid" onchange="saveHistory()"><option>Unpaid</option><option>Paid</option></select></td>
     <td><select class="history-select" data-val="Cash" onchange="saveHistory()"><option>Cash</option><option>GCash</option></select></td>
-    <td style="text-align:center"><button class="del-btn" onclick="deleteRow(this)">🗑️</button></td>
-    <td style="text-align:center"><button class="action-btn" style="width:auto; padding:5px 10px; margin:0; font-size:14px;" onclick="copyOrderSummary(this)">Copy Summary</button></td>
+    <td><button class="del-btn" onclick="deleteRow(this)">🗑️</button></td>
+    <td><button class="action-btn" style="width:auto; padding:5px 10px; margin:0; font-size:14px;" onclick="copyOrderSummary(this)">Copy Summary</button></td>
   `;
   historyBox.prepend(hRow);
-  orderCounter++;
   saveHistory();
   
   this.textContent = "✅ Order Logged";
   this.classList.add("success-state");
   setTimeout(() => { 
     this.textContent = "Log Order & Clear"; this.classList.remove("success-state");
-    nameInp.value = ""; addrInp.value = ""; document.getElementById("specialInstructions").value = ""; 
-    blkInp.value = ""; lotInp.value = ""; commInp.value = "Home"; toggleAddressFields();
-    orderBody.innerHTML = ""; addOrderRow();
+    nameInp.value = ""; addrInp.value = ""; blkInp.value = ""; lotInp.value = ""; 
+    document.getElementById("specialInstructions").value = ""; orderBody.innerHTML = ""; addOrderRow();
   }, 1000);
 };
 
-function deleteRow(btn) { if(confirm("Delete this order?")) { btn.parentElement.parentElement.remove(); saveHistory(); } }
+function deleteRow(btn) { if(confirm("Delete order?")) { btn.parentElement.parentElement.remove(); saveHistory(); } }
 function startNewDay() { if(confirm("Reset all data?")) { localStorage.clear(); location.reload(); } }
-
-document.getElementById("copyTableBtn").onclick = function() {
-  let text = "";
-  historyBox.querySelectorAll("tr").forEach(r => {
-    let rowData = [];
-    for (let i = 0; i < r.cells.length - 2; i++) {
-        let cell = r.cells[i];
-        let select = cell.querySelector('select');
-        rowData.push(select ? select.value : cell.innerText);
-    }
-    text += rowData.join("\t") + "\n";
-  });
-  navigator.clipboard.writeText(text);
-};
 
 function copyOrderSummary(btn) {
   const row = btn.parentElement.parentElement;
-  const orderCodes = row.cells[6].innerText.split(", ");
-  const fullOrderNames = orderCodes.map(item => {
-    const parts = item.split("x ");
-    const qty = parts[0];
-    const code = parts[1];
-    const menuItem = menuData.find(m => m.code === code);
-    return `${qty}x ${menuItem ? menuItem.menu : code}`;
-  }).join("\n");
-
-  const summary = `Order No.: ${row.cells[0].innerText}
-Name: ${row.cells[3].innerText}
-Address: ${row.cells[4].innerText}
-Total: ${row.cells[5].innerText}
-Status: ${row.cells[8].querySelector('select').value}
-Payment: ${row.cells[9].querySelector('select').value}
-Items: 
-${fullOrderNames}`;
-
+  const summary = `Order No.: ${row.cells[0].innerText}\nName: ${row.cells[3].innerText}\nAddress: ${row.cells[4].innerText}\nTotal: ${row.cells[5].innerText}\nItems: ${row.cells[6].innerText}`;
   navigator.clipboard.writeText(summary);
-  const oldText = btn.innerText;
-  btn.innerText = "✅ Copied!";
-  setTimeout(() => btn.innerText = oldText, 1500);
 }
 
 function updateClock() {
   const now = new Date();
-  const timeDiv = document.getElementById('timePHT');
-  const dateDiv = document.getElementById('datePHT');
-  if(timeDiv) timeDiv.textContent = now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true});
-  if(dateDiv) dateDiv.textContent = now.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'2-digit', year:'numeric'});
+  document.getElementById('timePHT').textContent = now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true});
+  document.getElementById('datePHT').textContent = now.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'2-digit', year:'numeric'});
 }
 setInterval(updateClock, 1000);
 </script>
