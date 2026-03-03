@@ -260,29 +260,31 @@ td { color: black; border-bottom: 1px solid #eee; }
 <script>
 let menuData = []; 
 
-// THE GOOGLE SHEET FETCH FUNCTION
 async function fetchMenu() {
+  // We use your direct CSV link here
   const menuSheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSa7lcRIlEfObIPUvMPgCyonedYt367Rmgun_QpBRvWjkp4RyDMKy_io1d8wrnEvgJG7rufwuKrANlH/pub?gid=0&single=true&output=csv"; 
 
   try {
-    // Adding a timestamp to the URL forces Google to give us the newest data
-    const finalURL = menuSheetURL + "&t=" + new Date().getTime();
-    const response = await fetch(finalURL);
+    // We use 'no-cache' to ensure we get the latest menu without breaking the URL
+    const response = await fetch(menuSheetURL, { cache: "no-cache" });
     
-    if (!response.ok) throw new Error('Failed to connect');
+    if (!response.ok) throw new Error('Network response was not ok');
     
     const csvData = await response.text();
     const rows = csvData.split(/\r?\n/).filter(row => row.trim() !== "");
     
     menuData = rows.map(row => {
-      const cols = row.split(",");
+      // Split by comma but handle potential quotes
+      const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
       const rawPrice = cols[2] ? cols[2].replace(/[^0-9.]/g, '') : "0";
       return {
-        menu: cols[0]?.trim(),
-        code: cols[1]?.trim(),
+        menu: cols[0]?.replace(/^"|"$/g, '').trim(),
+        code: cols[1]?.replace(/^"|"$/g, '').trim(),
         price: parseFloat(rawPrice)
       };
     }).filter(item => item.menu && !isNaN(item.price));
+
+    if (menuData.length === 0) throw new Error('No items found');
 
     renderMenuDisplay();
     updateOrderDropdowns();
@@ -291,13 +293,14 @@ async function fetchMenu() {
     document.getElementById("menuDisplayBody").innerHTML = 
       `<tr><td colspan="4" style="color:red; text-align:center; font-weight:bold; padding:20px;">
         ⚠️ Error loading Menu Database. Please refresh the page<br>
-        <button onclick="fetchMenu()" style="margin-top:10px; padding:5px 15px; cursor:pointer;">Retry Now</button>
+        <button onclick="fetchMenu()" style="margin-top:10px; padding:5px 15px; cursor:pointer; border-radius:8px;">Retry Now</button>
       </td></tr>`;
   }
 }
-  
+
 function renderMenuDisplay() {
   const body = document.getElementById("menuDisplayBody");
+  if(!body) return;
   body.innerHTML = ""; 
   menuData.forEach(item => {
     const tr = document.createElement("tr");
@@ -330,7 +333,7 @@ let orderCounter = parseInt(localStorage.getItem("dukiks_counter")) || 101;
 window.onload = async () => {
   updateClock();
   toggleAddressFields();
-  await fetchMenu(); // Wait for menu to load
+  await fetchMenu();
   
   if(localStorage.getItem("dukiks_history")) {
     historyBox.innerHTML = localStorage.getItem("dukiks_history");
@@ -485,7 +488,6 @@ document.getElementById("copyTableBtn").onclick = function() {
     text += rowData.join("\t") + "\n";
   });
   navigator.clipboard.writeText(text);
-  window.open("https://docs.google.com/spreadsheets/d/1Y0fxsaI3jva56h42jg9jRq1FS6vmbXmxl5X2e-cc69I/edit?gid=1589209915#gid=1589209915", "_blank");
 };
 
 function copyOrderSummary(btn) {
