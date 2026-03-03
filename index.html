@@ -5,40 +5,63 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DUKIKS POS</title>
 <style>
-body { font-family: Arial, sans-serif; margin: 0; padding: 110px 20px 40px 20px; background-color: #ff6b00; font-size: 22px; }
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 110px 20px 40px 20px;
+  background-color: #ff6b00;
+  font-size: 22px;
+}
+
 .logo-container { text-align: center; margin-top: 20px; }
 .logo-container img { max-height: 150px; width: auto; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
+
 h1 { text-align: center; font-weight: bold; font-size: 40px; color: white; margin-top: 10px; }
 .subtitle { text-align: center; font-size: 11px; color: white; margin-bottom: 30px; }
+
 .panel { max-width: 1000px; width: 100%; margin: 0 auto 40px auto; box-sizing: border-box; }
+
 table { border-collapse: collapse; border-radius: 10px; overflow: hidden; background: white; width: 100%; }
 th, td { padding: 10px 15px; text-align: left; }
 th { background-color: black; color: white; }
 td { color: black; border-bottom: 1px solid #eee; }
+
 .white-panel { background-color: white; padding: 25px; border-radius: 15px; }
 .white-panel h2 { text-align: center; color: black; margin-bottom: 22px; }
+
 .summary-container { display: flex; justify-content: space-between; gap: 15px; margin-bottom: 20px; }
 .summary-card { background: black; color: white; padding: 15px; border-radius: 12px; flex: 1; text-align: center; box-shadow: 0 4px #333; }
 .summary-card div { font-size: 12px; text-transform: uppercase; margin-bottom: 5px; color: #ff6b00; }
 .summary-card span { font-size: 22px; font-weight: bold; }
+
 .input-row { display: flex; flex-direction: column; margin-bottom: 15px; max-width: 850px; margin: 0 auto 15px auto; }
 .input-row label { font-weight: bold; color: black; margin-bottom: 5px;}
 .input-row input, .input-row select { padding: 10px; font-size: 22px; border: 2px solid #ccc; border-radius: 8px; transition: all 0.3s; width: 100%; box-sizing: border-box; }
+
 .hidden-field { display: none; }
+
 .order-table { width: 100%; max-width: 850px; margin: 20px auto; border-collapse: collapse; }
 .order-table th, .order-table td { border: 1px solid #ccc; color: black; padding: 10px; }
 .order-table select, .order-table input { width: 100%; font-size: 22px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 5px; }
-.action-btn { background-color: #000000; color: white; border: none; padding: 15px 40px; cursor: pointer; display: block; margin: 20px auto; font-size: 18px; font-weight: bold; border-radius: 12px; width: 320px; text-align: center; box-shadow: 0 6px #333; transition: all 0.2s; position: relative; }
+
+.action-btn {
+  background-color: #000000; color: white; border: none; padding: 15px 40px; cursor: pointer; display: block; margin: 20px auto;
+  font-size: 18px; font-weight: bold; border-radius: 12px; width: 320px; text-align: center;
+  box-shadow: 0 6px #333; transition: all 0.2s; position: relative;
+}
 .action-btn:hover { background-color: #ff6b00; box-shadow: 0 6px #b34a00; }
 .action-btn:active { box-shadow: 0 2px #333; transform: translateY(4px); }
+
 .del-btn { background: none; border: none; cursor: pointer; font-size: 24px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
 .history-select { padding: 4px; border-radius: 4px; border: 1px solid #ccc; font-size: 13px; }
 .success-state { background-color: #4cd964 !important; box-shadow: 0 6px #38a84d !important; }
 .error-msg { color: #ff3b30; font-size: 16px; text-align: center; font-weight: bold; margin-bottom: 15px; display: none; }
+
 .history-panel { background-color: white; border-radius: 10px; padding: 20px; }
 .history-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 10px; }
 .history-table th, .history-table td { border: 1px solid #ccc; padding: 8px; color: black; }
 .history-table th { background-color: #f0f0f0; }
+
 .floating-datetime { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.85); padding: 10px 25px; border-radius: 50px; text-align: center; z-index: 9999; color: white; }
 .digital-time { font-size: 30px; font-weight: bold; line-height: 1; }
 .date-display { font-size: 16px; margin-top: 5px; }
@@ -56,18 +79,25 @@ td { color: black; border-bottom: 1px solid #eee; }
 </div>
 
 <h1>Dukik's Hungry Hub</h1>
-<div class="subtitle">Order Intake Created by Naydex: Dukik's Hungry Hub</div>
+<div class="subtitle">Dukik’s Hungry Hub Order Intake Form</div>
 
 <div class="panel">
   <table>
-    <thead><tr><th>Type</th><th>Menu</th><th>Code</th><th>Price</th></tr></thead>
-    <tbody id="menuDisplayBody"></tbody>
+    <tr><th>Type</th><th>Menu</th><th>Code</th><th>Price</th></tr>
+    <tr><td>Meal</td><td>Pork Steak with rice</td><td>PSWR</td><td>₱149.00</td></tr>
+    <tr><td>Meal</td><td>Fried Chicken with rice</td><td>FCWR</td><td>₱109.00</td></tr>
+    <tr><td>Meal</td><td>Pork Chop with rice</td><td>PCWR</td><td>₱75.00</td></tr>
+    <tr><td>Meal</td><td>Pork Steak no rice</td><td>PSNR</td><td>₱134.00</td></tr>
+    <tr><td>Meal</td><td>Fried Chicken no rice</td><td>FCNR</td><td>₱94.00</td></tr>
+    <tr><td>Meal</td><td>Pork Chop no rice</td><td>PCNR</td><td>₱60.00</td></tr>
+    <tr><td>Add-on</td><td>Extra Rice</td><td>ERice</td><td>₱15.00</td></tr>
+    <tr><td>Add-on</td><td>Extra Sauce</td><td>ESauce</td><td>₱15.00</td></tr>
   </table>
 </div>
 
 <div class="panel white-panel">
   <h2>Order Intake</h2>
-  <div id="validationError" class="error-msg">⚠️ Please check Name, Items, or Block/Lot!</div>
+  <div id="validationError" class="error-msg">⚠️ Please check Name, Address, and Items!</div>
   
   <div class="input-row">
     <label>Name</label>
@@ -204,11 +234,11 @@ td { color: black; border-bottom: 1px solid #eee; }
   <div id="subdivisionGroup" class="hidden-field">
     <div class="input-row">
       <label>Block/Floor#</label>
-      <input type="text" id="blockFloor" placeholder="Numbers only">
+      <input type="text" id="blockFloor" placeholder="Numbers only" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
     </div>
     <div class="input-row">
       <label>Lot/Room#</label>
-      <input type="text" id="lotRoom" placeholder="Numbers only">
+      <input type="text" id="lotRoom" placeholder="Numbers only" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
     </div>
   </div>
 
@@ -230,19 +260,38 @@ td { color: black; border-bottom: 1px solid #eee; }
   </table>
 
   <button class="action-btn" id="startNewOrderBtn">Log Order & Clear</button>
+<small style="display:block; text-align:center; color:#666; margin-top:-10px; margin-bottom:20px; font-size: 14px; font-weight: normal;">
+  This saves the order to history, clears the form, and generates a unique Reference Number.
+</small>
 </div>
 
 <div class="panel history-panel">
   <h3 style="text-align:center">Order History</h3>
+  
   <div class="summary-container">
     <div class="summary-card"><div>Total Orders</div><span id="summaryTotalOrders">0</span></div>
     <div class="summary-card"><div>Total Sales</div><span id="summaryTotalSales">₱0.00</span></div>
     <div class="summary-card"><div>Best Seller</div><span id="summaryBestSeller">None</span></div>
   </div>
 
-<button class="action-btn" id="copyTableBtn" style="width: auto; padding: 10px 20px; font-size: 14px;">⧉ Copy Table</button>
+<button class="action-btn" id="copyTableBtn">⧉ Copy Table</button>
+<small style="display:block; text-align:center; color:#666; margin-top:-10px; margin-bottom:20px; font-size: 14px; font-weight: normal;">
+  This button copies the table below to your clipboard and automatically opens The Sales Log Google Sheet for easy pasting.
+</small>
+
+<div style="background: #fff8f0; border: 1px solid #ffccbc; padding: 12px; border-radius: 8px; margin: 20px 0 10px 0; font-size: 14px; text-align: center;">
+  <strong style="color: #d84315; display: block; margin-bottom: 5px;">💡 Table Guide:</strong>
+  <div style="display: flex; gap: 20px; color: #444; justify-content: center; flex-wrap: wrap;">
+    <span><strong>🗑️ (Delete):</strong> Removes order permanently.</span>
+    <span><strong>Copy Order Summary:</strong> Copies full details for the rider/customer.</span>
+  </div>
+</div>
 
 <div style="overflow-x:auto;">
+  <table class="history-table">
+
+
+  <div style="overflow-x:auto;">
     <table class="history-table">
       <thead>
         <tr>
@@ -251,20 +300,21 @@ td { color: black; border-bottom: 1px solid #eee; }
       </thead>
       <tbody id="historyBox"></tbody>
     </table>
+  </div>
 </div>
 
-<button class="action-btn" id="newDayBtn" onclick="startNewDay()" style="width: 150px; font-size: 14px;">Start a New Day</button>
+<button class="action-btn" id="newDayBtn" onclick="startNewDay()">Start a New Day</button>
 
 <script>
 const menuData = [
-  { type: "Meal", menu: "Pork Steak with rice", code: "PSWR", price: 149.00 },
-  { type: "Meal", menu: "Fried Chicken with rice", code: "FCWR", price: 109.00 },
-  { type: "Meal", menu: "Pork Chop with rice", code: "PCWR", price: 75.00 },
-  { type: "Meal", menu: "Pork Steak no rice", code: "PSNR", price: 134.00 },
-  { type: "Meal", menu: "Fried Chicken no rice", code: "FCNR", price: 94.00 },
-  { type: "Meal", menu: "Pork Chop no rice", code: "PCNR", price: 60.00 },
-  { type: "Add-on", menu: "Extra Rice", code: "ERice", price: 15.00 },
-  { type: "Add-on", menu: "Extra Sauce", code: "ESauce", price: 15.00 }
+  {menu:"Pork Steak with rice", code:"PSWR", price:149},
+  {menu:"Fried Chicken with rice", code:"FCWR", price:109},
+  {menu:"Pork Chop with rice", code:"PCWR", price:75},
+  {menu:"Pork Steak no rice", code:"PSNR", price:134},
+  {menu:"Fried Chicken no rice", code:"FCNR", price:94},
+  {menu:"Pork Chop no rice", code:"PCNR", price:60},
+  {menu:"Extra Rice", code:"ERice", price:15},
+  {menu:"Extra Sauce", code:"ESauce", price:15},
 ];
 
 const orderBody = document.getElementById("orderBody");
@@ -277,36 +327,39 @@ const addrInp = document.getElementById("customerAddress");
 let orderCounter = parseInt(localStorage.getItem("dukiks_counter")) || 101;
 
 window.onload = () => {
-  renderMenuDisplay();
-  updateClock();
-  toggleAddressFields();
+  addOrderRow();
   if(localStorage.getItem("dukiks_history")) {
     historyBox.innerHTML = localStorage.getItem("dukiks_history");
+    
     historyBox.querySelectorAll('tr').forEach(row => {
-      const s1 = row.cells[8]?.querySelector('select');
-      const s2 = row.cells[9]?.querySelector('select');
-      if(s1) { s1.value = s1.getAttribute('data-val'); s1.onchange = saveHistory; }
-      if(s2) { s2.value = s2.getAttribute('data-val'); s2.onchange = saveHistory; }
+      const statusSelect = row.cells[8]?.querySelector('select');
+      const paySelect = row.cells[9]?.querySelector('select');
+      
+      if(statusSelect && statusSelect.getAttribute('data-val')) {
+        statusSelect.value = statusSelect.getAttribute('data-val');
+      }
+      if(paySelect && paySelect.getAttribute('data-val')) {
+        paySelect.value = paySelect.getAttribute('data-val');
+      }
+      
+      if(statusSelect) statusSelect.onchange = saveHistory;
+      if(paySelect) paySelect.onchange = saveHistory;
     });
   }
-  addOrderRow();
   updateSummary();
+  updateClock();
+  toggleAddressFields();
 };
-
-function renderMenuDisplay() {
-  const body = document.getElementById("menuDisplayBody");
-  body.innerHTML = menuData.map(item => `
-    <tr><td>${item.type}</td><td>${item.menu}</td><td>${item.code}</td><td>₱${item.price.toFixed(2)}</td></tr>
-  `).join("");
-}
 
 function toggleAddressFields() {
   const subGroup = document.getElementById("subdivisionGroup");
   const homeGroup = document.getElementById("homeAddressGroup");
   if(commInp.value === "Home") {
-    subGroup.classList.add("hidden-field"); homeGroup.classList.remove("hidden-field");
+    subGroup.classList.add("hidden-field");
+    homeGroup.classList.remove("hidden-field");
   } else {
-    subGroup.classList.remove("hidden-field"); homeGroup.classList.add("hidden-field");
+    subGroup.classList.remove("hidden-field");
+    homeGroup.classList.add("hidden-field");
   }
 }
 
@@ -343,9 +396,10 @@ function updateTable() {
 }
 
 function saveHistory() {
-    historyBox.querySelectorAll('select').forEach(sel => sel.setAttribute('data-val', sel.value));
+    historyBox.querySelectorAll('select').forEach(sel => {
+        sel.setAttribute('data-val', sel.value);
+    });
     localStorage.setItem("dukiks_history", historyBox.innerHTML);
-    localStorage.setItem("dukiks_counter", orderCounter);
     updateSummary();
 }
 
@@ -377,13 +431,8 @@ function updateSummary() {
 document.getElementById("startNewOrderBtn").onclick = function() {
   const errorMsg = document.getElementById("validationError");
   const rows = orderBody.querySelectorAll("tr:not(#grandTotalRow)");
-  
-  // Validation
-  const isHome = commInp.value === "Home";
-  const nameOk = nameInp.value.trim() !== "";
-  const addressOk = isHome ? addrInp.value.trim() !== "" : (blkInp.value.trim() !== "" && lotInp.value.trim() !== "");
-  
   let orders = []; let total = 0; let hasItem = false;
+
   rows.forEach(r => {
     const code = r.querySelector("select").value;
     const qty = r.querySelector("input").value;
@@ -391,55 +440,117 @@ document.getElementById("startNewOrderBtn").onclick = function() {
     if(item) { orders.push(`${qty}x ${item.code}`); total += item.price * qty; hasItem = true; }
   });
 
-  if(!nameOk || !addressOk || !hasItem) { 
-    errorMsg.style.display = "block"; return; 
+  if(!nameInp.value.trim() || !hasItem) {
+      errorMsg.style.display = "block"; 
+      return;
   } 
   errorMsg.style.display = "none";
 
   const now = new Date();
-  const refNum = `#${orderCounter++}`;
-  let fullAddress = isHome ? addrInp.value : `${commInp.value} B${blkInp.value} L${lotInp.value}`;
+  const dateCode = (now.getMonth() + 1).toString().padStart(2, '0') + now.getDate().toString().padStart(2, '0') + now.getFullYear().toString().slice(-2);
+  const refNum = `#${dateCode}${orderCounter}`;
+  
+  let fullAddress = (commInp.value === "Home") ? addrInp.value : `${commInp.value} - Blk ${blkInp.value}, Lot ${lotInp.value}`;
 
   const hRow = document.createElement("tr");
   hRow.innerHTML = `
-    <td>${refNum}</td>
-    <td>${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()}</td>
-    <td>${now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true})}</td>
+    <td style="font-weight:bold; color:#ff6b00;">${refNum}</td>
+  <td>${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()}</td>
+  <td>${now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true})}</td>
     <td>${nameInp.value}</td>
     <td>${fullAddress}</td>
-    <td>₱${formatPHP(total)}</td>
+    <td style="font-weight:bold;">₱${formatPHP(total)}</td>
     <td>${orders.join(", ")}</td>
     <td>${document.getElementById("specialInstructions").value || '-'}</td>
     <td><select class="history-select" data-val="Unpaid" onchange="saveHistory()"><option>Unpaid</option><option>Paid</option></select></td>
-    <td><select class="history-select" data-val="Cash" onchange="saveHistory()"><option>Cash</option><option>GCash</option></select></td>
-    <td><button class="del-btn" onclick="deleteRow(this)">🗑️</button></td>
-    <td><button class="action-btn" style="width:auto; padding:5px 10px; margin:0; font-size:14px;" onclick="copyOrderSummary(this)">Copy Summary</button></td>
+    <td><select class="history-select" data-val="GCash" onchange="saveHistory()"><option>GCash</option><option>Cash</option><option>Bank Transfer</option><option>Credit Card</option></select></td>
+    <td style="text-align:center"><button class="del-btn" onclick="deleteRow(this)">🗑️</button></td>
+    <td style="text-align:center"><button class="action-btn" style="width:auto; padding:5px 10px; margin:0; font-size:14px;" onclick="copyOrderSummary(this)">Copy Order Summary</button></td>
   `;
-  historyBox.prepend(hRow);
+  historyBox.appendChild(hRow);
+  orderCounter++;
+  localStorage.setItem("dukiks_counter", orderCounter);
   saveHistory();
   
   this.textContent = "✅ Order Logged";
   this.classList.add("success-state");
   setTimeout(() => { 
     this.textContent = "Log Order & Clear"; this.classList.remove("success-state");
-    nameInp.value = ""; addrInp.value = ""; blkInp.value = ""; lotInp.value = ""; 
-    document.getElementById("specialInstructions").value = ""; orderBody.innerHTML = ""; addOrderRow();
+    nameInp.value = ""; addrInp.value = ""; document.getElementById("specialInstructions").value = ""; 
+    blkInp.value = ""; lotInp.value = ""; commInp.value = "Home"; toggleAddressFields();
+    orderBody.innerHTML = ""; addOrderRow();
   }, 1000);
 };
 
-function deleteRow(btn) { if(confirm("Delete order?")) { btn.parentElement.parentElement.remove(); saveHistory(); } }
-function startNewDay() { if(confirm("Reset all data?")) { localStorage.clear(); location.reload(); } }
+function deleteRow(btn) { if(confirm("Delete this order?")) { btn.parentElement.parentElement.remove(); saveHistory(); } }
+function startNewDay() { if(confirm("Reset all data?")) { localStorage.clear(); historyBox.innerHTML = ""; orderCounter = 101; updateSummary(); } }
+
+document.getElementById("copyTableBtn").onclick = function() {
+  let text = "";
+  historyBox.querySelectorAll("tr").forEach(r => {
+    let rowData = [];
+    for (let i = 0; i < r.cells.length - 2; i++) {
+        let cell = r.cells[i];
+        let select = cell.querySelector('select');
+        rowData.push(select ? select.value : cell.innerText);
+    }
+    text += rowData.join("\t") + "\n";
+  });
+  navigator.clipboard.writeText(text);
+  
+  window.open("https://docs.google.com/spreadsheets/d/1Y0fxsaI3jva56h42jg9jRq1FS6vmbXmxl5X2e-cc69I/edit?gid=1589209915#gid=1589209915", "_blank");
+
+  const originalHtml = this.innerHTML;
+  this.innerHTML = "✅ Copied & Sheet Opened";
+  this.classList.add("success-state");
+  setTimeout(() => { this.innerHTML = originalHtml; this.classList.remove("success-state"); }, 2000);
+};
 
 function copyOrderSummary(btn) {
   const row = btn.parentElement.parentElement;
-  const summary = `Order No.: ${row.cells[0].innerText}\nName: ${row.cells[3].innerText}\nAddress: ${row.cells[4].innerText}\nTotal: ${row.cells[5].innerText}\nItems: ${row.cells[6].innerText}`;
+  const refNum = row.cells[0].innerText;
+  const dateStr = row.cells[1].innerText;
+  const timeStr = row.cells[2].innerText;
+  const name = row.cells[3].innerText;
+  const location = row.cells[4].innerText;
+  const total = row.cells[5].innerText;
+  const notes = row.cells[7].innerText;
+  const status = row.cells[8].querySelector('select').value;
+  const payMode = row.cells[9].querySelector('select').value;
+
+  const orderCodes = row.cells[6].innerText.split(", ");
+  const fullOrderNames = orderCodes.map(item => {
+    const parts = item.split("x ");
+    const qty = parts[0];
+    const code = parts[1];
+    const menuItem = menuData.find(m => m.code === code);
+    return `${qty}x ${menuItem ? menuItem.menu : code}`;
+  }).join("\n");
+
+  const summary = `Order No.: ${refNum}
+Date and time: ${dateStr} ${timeStr}
+Name: ${name}
+Address: ${location}
+Total: ${total}
+${status}, ${payMode}
+
+Order/s: 
+${fullOrderNames}
+
+Special Notes: ${notes}`;
+
   navigator.clipboard.writeText(summary);
+  const originalText = btn.innerText;
+  btn.innerText = "✅ Copied!";
+  setTimeout(() => { btn.innerText = originalText; }, 1500);
 }
 
 function updateClock() {
   const now = new Date();
-  document.getElementById('timePHT').textContent = now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true});
-  document.getElementById('datePHT').textContent = now.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'2-digit', year:'numeric'});
+  const timeDiv = document.getElementById('timePHT');
+  const dateDiv = document.getElementById('datePHT');
+  if(timeDiv) timeDiv.textContent = now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true});
+  if(dateDiv) dateDiv.textContent = now.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'2-digit', year:'numeric'});
 }
 setInterval(updateClock, 1000);
 </script>
