@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DUKIKS POS - EMERGENCY BACKUP</title>
+<title>DUKIKS POS</title>
 <style>
 body { font-family: Arial, sans-serif; margin: 0; padding: 110px 20px 40px 20px; background-color: #ff6b00; font-size: 22px; }
 .logo-container { text-align: center; margin-top: 20px; }
@@ -56,7 +56,7 @@ td { color: black; border-bottom: 1px solid #eee; }
 </div>
 
 <h1>Dukik's Hungry Hub</h1>
-<div class="subtitle">Manual Menu Mode (Reliable for Opening)</div>
+<div class="subtitle">Order Intake Created by Janica Flores</div>
 
 <div class="panel">
   <table>
@@ -83,6 +83,7 @@ td { color: black; border-bottom: 1px solid #eee; }
       <option value="Alegria Palms 1">Alegria Palms 1</option>
       <option value="Alegria Palms 2">Alegria Palms 2</option>
       <option value="Alegria Palms 3">Alegria Palms 3</option>
+      <option value="Aldea Del Sol">Aldea Del Sol</option>
       <option value="Deca Homes Mactan 1">Deca Homes Mactan 1</option>
       <option value="Deca Homes Mactan 2">Deca Homes Mactan 2</option>
       <option value="Deca Homes Mactan 3">Deca Homes Mactan 3</option>
@@ -90,7 +91,7 @@ td { color: black; border-bottom: 1px solid #eee; }
       <option value="Deca Homes Mactan 5">Deca Homes Mactan 5</option>
       <option value="Saekyung">Saekyung</option>
       <option value="Pacific Grand Villas">Pacific Grand Villas</option>
-      </select>
+    </select>
   </div>
 
   <div id="subdivisionGroup" class="hidden-field">
@@ -131,41 +132,35 @@ td { color: black; border-bottom: 1px solid #eee; }
     <div class="summary-card"><div>Total Sales</div><span id="summaryTotalSales">₱0.00</span></div>
     <div class="summary-card"><div>Best Seller</div><span id="summaryBestSeller">None</span></div>
   </div>
-  <tbody id="historyBox"></tbody>
+
+  <button class="action-btn" id="copyTableBtn" style="width: auto; padding: 10px 20px; font-size: 14px;">⧉ Copy History</button>
+
+  <div style="overflow-x:auto;">
+      <table class="history-table">
+        <thead>
+          <tr>
+              <th>Ref #</th><th>Name</th><th>Address</th><th>Total</th><th>Items</th><th>Notes</th><th>Status</th><th>Payment</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="historyBox"></tbody>
+      </table>
+  </div>
+  <button class="action-btn" id="newDayBtn" onclick="startNewDay()" style="background: #ff3b30; width: 150px; font-size: 14px; margin-top: 10px;">Reset Day</button>
 </div>
 
 <script>
-// --- MANUAL MENU SETUP ---
-// Edit your items here directly. No more Google Sheet errors!
+// --- YOUR MENU DATA ---
 const menuData = [
-  { menu: "Pork Steak with Rice", code: "PSWR", price: 149.00 },
-  { menu: "Chicken Inasal with Rice", code: "CIWR", price: 139.00 },
-  { menu: "Beef Tapa with Rice", code: "BTWR", price: 159.00 },
-  { menu: "Extra Rice", code: "ER", price: 20.00 },
-  { menu: "Coke Mismo", code: "CM", price: 25.00 }
+  { type: "Meal", menu: "Pork Steak with rice", code: "PSWR", price: 149.00 },
+  { type: "Meal", menu: "Fried Chicken with rice", code: "FCWR", price: 109.00 },
+  { type: "Meal", menu: "Pork Chop with rice", code: "PCWR", price: 75.00 },
+  { type: "Meal", menu: "Pork Steak no rice", code: "PSNR", price: 134.00 },
+  { type: "Meal", menu: "Fried Chicken no rice", code: "FCNR", price: 94.00 },
+  { type: "Meal", menu: "Pork Chop no rice", code: "PCNR", price: 60.00 },
+  { type: "Add-on", menu: "Extra Rice", code: "ERice", price: 15.00 },
+  { type: "Add-on", menu: "Extra Sauce", code: "ESauce", price: 15.00 }
 ];
 
-function renderMenuDisplay() {
-  const body = document.getElementById("menuDisplayBody");
-  body.innerHTML = ""; 
-  menuData.forEach(item => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td>Meal</td><td>${item.menu}</td><td>${item.code}</td><td>₱${item.price.toFixed(2)}</td>`;
-    body.appendChild(tr);
-  });
-}
-
-function updateOrderDropdowns() {
-  const optionsHtml = `<option value="">Select</option>` + 
-    menuData.map(m => `<option value="${m.code}">${m.menu}</option>`).join('');
-  document.querySelectorAll(".item-select").forEach(sel => {
-    const currentVal = sel.value;
-    sel.innerHTML = optionsHtml;
-    sel.value = currentVal;
-  });
-}
-
-// --- APP LOGIC ---
 const orderBody = document.getElementById("orderBody");
 const historyBox = document.getElementById("historyBox");
 const nameInp = document.getElementById("customerName");
@@ -186,22 +181,27 @@ window.onload = () => {
   updateSummary();
 };
 
+function renderMenuDisplay() {
+  const body = document.getElementById("menuDisplayBody");
+  body.innerHTML = menuData.map(item => `
+    <tr><td>${item.type}</td><td>${item.menu}</td><td>${item.code}</td><td>₱${item.price.toFixed(2)}</td></tr>
+  `).join("");
+}
+
 function toggleAddressFields() {
   const subGroup = document.getElementById("subdivisionGroup");
   const homeGroup = document.getElementById("homeAddressGroup");
   if(commInp.value === "Home") {
-    subGroup.classList.add("hidden-field");
-    homeGroup.classList.remove("hidden-field");
+    subGroup.classList.add("hidden-field"); homeGroup.classList.remove("hidden-field");
   } else {
-    subGroup.classList.remove("hidden-field");
-    homeGroup.classList.add("hidden-field");
+    subGroup.classList.remove("hidden-field"); homeGroup.classList.add("hidden-field");
   }
 }
 
 function addOrderRow() {
   const tr = document.createElement("tr");
   tr.innerHTML = `
-    <td><select class="item-select" onchange="updateTable()"><option value="">Select</option>${menuData.map(m=>`<option value="${m.code}">${m.menu}</option>`).join('')}</select></td>
+    <td><select class="item-select" onchange="updateTable()"><option value="">Select Item</option>${menuData.map(m=>`<option value="${m.code}">${m.menu}</option>`).join('')}</select></td>
     <td><input type="number" value="1" min="1" oninput="updateTable()"></td>
     <td class="row-total">₱0.00</td>
   `;
@@ -241,26 +241,43 @@ document.getElementById("startNewOrderBtn").onclick = function() {
 
   if(!nameInp.value.trim() || !hasItem) { alert("Check Name and Order!"); return; }
 
-  const now = new Date();
-  const refNum = `#${orderCounter++}`;
-  let fullAddress = (commInp.value === "Home") ? addrInp.value : `${commInp.value} - Blk ${blkInp.value}, Lot ${lotInp.value}`;
+  const refNum = `#DHK-${orderCounter++}`;
+  let fullAddress = (commInp.value === "Home") ? addrInp.value : `${commInp.value} B${blkInp.value} L${lotInp.value}`;
 
   const hRow = document.createElement("tr");
-  hRow.innerHTML = `<td>${refNum}</td><td>${nameInp.value}</td><td>${fullAddress}</td><td>₱${total.toFixed(2)}</td><td>${orders.join(", ")}</td>`;
+  hRow.innerHTML = `
+    <td>${refNum}</td><td>${nameInp.value}</td><td>${fullAddress}</td><td>₱${total.toFixed(2)}</td><td>${orders.join(", ")}</td><td>${document.getElementById("specialInstructions").value || "-"}</td>
+    <td><select><option>Unpaid</option><option>Paid</option></select></td>
+    <td><select><option>Cash</option><option>GCash</option></select></td>
+    <td><button onclick="this.parentElement.parentElement.remove(); saveHistory();">🗑️</button></td>
+  `;
   historyBox.prepend(hRow);
+  saveHistory();
   
+  // Reset
+  nameInp.value = ""; addrInp.value = ""; blkInp.value = ""; lotInp.value = ""; 
+  document.getElementById("specialInstructions").value = "";
+  orderBody.innerHTML = ""; addOrderRow();
+};
+
+function saveHistory() {
   localStorage.setItem("dukiks_counter", orderCounter);
   localStorage.setItem("dukiks_history", historyBox.innerHTML);
   updateSummary();
-  
-  // Reset Form
-  nameInp.value = ""; addrInp.value = ""; orderBody.innerHTML = ""; addOrderRow();
-};
+}
 
 function updateSummary() {
-    const rows = historyBox.querySelectorAll("tr");
-    document.getElementById("summaryTotalOrders").textContent = rows.length;
+  const rows = historyBox.querySelectorAll("tr");
+  let totalSales = 0;
+  rows.forEach(row => {
+    const priceText = row.cells[3].innerText.replace('₱', '').replace(/,/g, '');
+    totalSales += parseFloat(priceText) || 0;
+  });
+  document.getElementById("summaryTotalOrders").textContent = rows.length;
+  document.getElementById("summaryTotalSales").textContent = "₱" + totalSales.toFixed(2);
 }
+
+function startNewDay() { if(confirm("Reset History?")) { localStorage.clear(); location.reload(); } }
 
 function updateClock() {
   const now = new Date();
