@@ -420,20 +420,12 @@ function saveHistory() {
 function updateSummary() {
   const rows = historyBox.querySelectorAll("tr");
   let totalSales = 0;
-  
-  // 1. Initialize only the categories you want
-  let itemCounts = {
-    "Fried Chicken": 0,
-    "Pork Steak": 0,
-    "Pork Chop": 0
-  };
+  let itemCounts = { "Fried Chicken": 0, "Pork Steak": 0, "Pork Chop": 0 };
 
   rows.forEach(row => {
-    // 2. Sales Calculation (Column 8)
     const priceText = row.cells[8].innerText.replace('₱', '').replace(/,/g, '');
     totalSales += parseFloat(priceText) || 0;
 
-    // 3. Counting Quantities (Column 9)
     const orderItems = row.cells[9].innerText.split(', ');
     orderItems.forEach(itemStr => {
       const parts = itemStr.split('x ');
@@ -441,10 +433,8 @@ function updateSummary() {
         const qty = parseInt(parts[0]) || 0;
         const code = parts[1];
         const menuItem = menuData.find(m => m.code === code);
-        
         if(menuItem) {
           const name = menuItem.menu;
-          // Grouping logic: check if the menu name contains your keywords
           if (name.includes("Fried Chicken")) itemCounts["Fried Chicken"] += qty;
           else if (name.includes("Pork Steak")) itemCounts["Pork Steak"] += qty;
           else if (name.includes("Pork Chop")) itemCounts["Pork Chop"] += qty;
@@ -453,7 +443,6 @@ function updateSummary() {
     });
   });
 
-  // 4. Update Header Stats
   document.getElementById("summaryTotalOrders").textContent = rows.length;
   document.getElementById("summaryTotalSales").textContent = "₱" + formatPHP(totalSales);
   
@@ -463,17 +452,149 @@ function updateSummary() {
   }
   document.getElementById("summaryBestSeller").textContent = bestItem;
 
-  // 5. Render the 3-column Breakdown (Strictly in your requested order)
   const breakdownDiv = document.getElementById("itemBreakdown");
   if(breakdownDiv) {
-    const order = ["Fried Chicken", "Pork Steak", "Pork Chop"];
-    breakdownDiv.innerHTML = order.map(name => `
+    const displayOrder = ["Fried Chicken", "Pork Steak", "Pork Chop"];
+    breakdownDiv.innerHTML = displayOrder.map(name => `
         <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding: 5px 0;">
-          <span style="font-size: 13px; color: #ddd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name.toUpperCase()}</span>
+          <span style="font-size: 13px; color: #ddd; white-space: nowrap;">${name.toUpperCase()}</span>
           <span style="color: #ff6b00; font-weight: bold; font-size: 16px;">${itemCounts[name]}</span>
         </div>
       `).join('');
   }
+}
+
+document.getElementById("startNewOrderBtn").onclick = function() {
+  document.querySelectorAll('.error-bump').forEach(el => el.classList.remove('error-bump'));
+  let valid = true;
+  const comm = commInp.value;
+  if (!nameInp.value.trim()) { nameInp.classList.add('error-bump'); valid = false; }
+  if (comm === "Home") {
+      if (!addrInp.value.trim()) { addrInp.classList.add('error-bump'); valid = false; }
+  } else {
+      if (!blkInp.value.trim()) { blkInp.classList.add('error-bump'); valid = false; }
+      if (!lotInp.value.trim()) { lotInp.classList.add('error-bump'); valid = false; }
+  }
+  const rows = orderBody.querySelectorAll("tr:not(#grandTotalRow)");
+  let orders = []; let total = 0; let hasItem = false;
+  rows.forEach(r => {
+    const code = r.querySelector("select").value;
+    const qty = r.querySelector("input").value;
+    const item = menuData.find(m => m.code === code);
+    if(item) { orders.push(`${qty}x ${item.code}`); total += item.price * qty; hasItem = true; }
+  });
+  if(!valid || !hasItem) { document.getElementById("validationError").style.display = "block"; return; }
+  document.getElementById("validationError").style.display = "none";
+  
+  const now = new Date();
+  const dateCode = (now.getMonth() + 1).toString().padStart(2, '0') + now.getDate().toString().padStart(2, '0') + now.getFullYear().toString().slice(-2);
+  const refNum = `#${dateCode}${orderCounter}`;
+  let fullAddress = (comm === "Home") ? addrInp.value : `${comm} - Blk ${blkInp.value}, Lot ${lotInp.value}`;
+
+  const hRow = document.createElement("tr");
+  hRow.innerHTML = `
+    <td style="font-weight:bold; color:#ff6b00;">${refNum}</td>
+    <td>${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()}</td>
+    <td>${now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true})}</td>
+    <td style="text-align:center"><button class="action-btn" style="width:auto; padding:5px 10px; margin:0; font-size:14px;" onclick="copyOrderSummary(this)">Copy Summary</button></td>
+    <td><select class="history-select" data-val="Unpaid" onchange="saveHistory()"><option>Unpaid</option><option>Paid</option></select></td>
+    <td><select class="history-select" data-val="GCash" onchange="saveHistory()"><option>GCash</option><option>Cash</option><option>Bank Transfer</option><option>Credit Card</option></select></td>
+    <td>${nameInp.value}</td>
+    <td>${fullAddress}</td>
+    <td style="font-weight:bold;">₱${formatPHP(total)}</td>
+    <td>${orders.join(", ")}</td>
+    <td>${document.getElementById("specialInstructions").value || '-'}</td>
+    <td style="text-align:center"><button class="del-btn" onclick="deleteRow(this)">🗑️</button></td>
+  `;
+  historyBox.appendChild(hRow);
+  orderCounter++;
+  localStorage.setItem("dukiks_counter", orderCounter);
+  saveHistory();
+  
+  // --- START AUTO-COPY ---
+  const summaryAuto = `Order No.: ${refNum}\nDate and time: ${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()} ${now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true})}\nName: ${nameInp.value}\nAddress: ${fullAddress}\nTotal: ₱${formatPHP(total)}\nUnpaid, GCash\n\nOrder/s: \n${orders.map(item => {
+    const p = item.split("x ");
+    const m = menuData.find(menu => menu.code === p[1]);
+    return `${p[0]}x ${m ? m.menu : p[1]}`;
+  }).join("\n")}\n\nSpecial Notes: ${document.getElementById("specialInstructions").value || '-'}`;
+
+  navigator.clipboard.writeText(summaryAuto);
+  window.open("https://www.messenger.com/t/1629578618166443", "_blank");
+  // --- END AUTO-COPY ---
+
+  this.textContent = "✅ Logged & Copied!";
+  this.classList.add("success-state");
+  setTimeout(() => { 
+    this.textContent = "Log Order & Clear"; this.classList.remove("success-state");
+    nameInp.value = ""; addrInp.value = ""; document.getElementById("specialInstructions").value = ""; 
+    blkInp.value = ""; lotInp.value = ""; commInp.value = "Home"; toggleAddressFields();
+    orderBody.innerHTML = ""; addOrderRow();
+  }, 1000);
+};
+
+function deleteRow(btn) { if(confirm("Delete this order?")) { btn.parentElement.parentElement.remove(); saveHistory(); } }
+function startNewDay() { if(confirm("Reset all data?")) { localStorage.clear(); historyBox.innerHTML = ""; orderCounter = 101; updateSummary(); location.reload(); } }
+
+document.getElementById("copyTableBtn").onclick = function() {
+  let text = "";
+  historyBox.querySelectorAll("tr").forEach(r => {
+    // We grab specific cells to match your Google Sheet format:
+    // Ref#, Date, Time, Name, Address, Total, Status, Mode, Orders, Notes
+    const ref    = r.cells[0].innerText;
+    const date   = r.cells[1].innerText;
+    const time   = r.cells[2].innerText;
+    const status = r.cells[4].querySelector('select').value;
+    const mode   = r.cells[5].querySelector('select').value;
+    const name   = r.cells[6].innerText;
+    const addr   = r.cells[7].innerText;
+    const total  = r.cells[8].innerText;
+    const orders = r.cells[9].innerText;
+    const notes  = r.cells[10].innerText;
+
+    const rowData = [ref, date, time, name, addr, total, status, mode, orders, notes];
+    text += rowData.join("\t") + "\n";
+  });
+  
+  navigator.clipboard.writeText(text);
+  window.open("https://docs.google.com/spreadsheets/d/1Y0fxsaI3jva56h42jg9jRq1FS6vmbXmxl5X2e-cc69I/edit?gid=1589209915#gid=1589209915", "_blank");
+  
+  const originalHtml = this.innerHTML;
+  this.innerHTML = "✅ Copied (Sheet Format)";
+  this.classList.add("success-state");
+  setTimeout(() => { this.innerHTML = originalHtml; this.classList.remove("success-state"); }, 2000);
+};
+
+function copyOrderSummary(btn) {
+  const row = btn.parentElement.parentElement;
+  
+  // Mapping for the Copy Summary Button (Visual Layout)
+  const refNum   = row.cells[0].innerText;
+  const dateStr  = row.cells[1].innerText;
+  const timeStr  = row.cells[2].innerText;
+  const status   = row.cells[4].querySelector('select').value;
+  const payMode  = row.cells[5].querySelector('select').value;
+  const name     = row.cells[6].innerText;
+  const location = row.cells[7].innerText;
+  const total    = row.cells[8].innerText;
+  const ordersRaw = row.cells[9].innerText;
+  const notes    = row.cells[10].innerText;
+
+  const orderCodes = ordersRaw.split(", ");
+  const fullOrderNames = orderCodes.map(item => {
+    const parts = item.split("x ");
+    const qty = parts[0];
+    const code = parts[1];
+    const menuItem = menuData.find(m => m.code === code);
+    return `${qty}x ${menuItem ? menuItem.menu : code}`;
+  }).join("\n");
+
+  const summary = `Order No.: ${refNum}\nDate and time: ${dateStr} ${timeStr}\nName: ${name}\nAddress: ${location}\nTotal: ${total}\n${status}, ${payMode}\n\nOrder/s: \n${fullOrderNames}\n\nSpecial Notes: ${notes}`;
+
+  navigator.clipboard.writeText(summary);
+  window.open("https://www.messenger.com/t/1629578618166443", "_blank");
+  const originalText = btn.innerText;
+  btn.innerText = "✅ Copied!";
+  setTimeout(() => { btn.innerText = originalText; }, 1500);
 }
 
 function updateClock() {
@@ -488,6 +609,7 @@ setInterval(updateClock, 1000);
 
 </body>
 </html>
+
 
 
 
