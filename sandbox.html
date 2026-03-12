@@ -120,7 +120,7 @@ td { color: black; border-bottom: 1px solid #eee; }
     <label>Community <span class="required-star">*</span></label>
     <select id="communitySelect" onchange="toggleAddressFields(); saveCurrentDraft();">
       <option value="Home">Home Address (Not a Subdivision)</option>
-      </select>
+    </select>
   </div>
 
   <div id="subdivisionGroup" class="hidden-field side-by-side">
@@ -186,7 +186,6 @@ let menuData = [];
 
 async function loadDataFromSheets() {
   try {
-    // Fetch Menu
     const mRes = await fetch(menuSheetURL);
     const mCsv = await mRes.text();
     menuData = mCsv.split("\n").slice(1).filter(r => r.trim() !== "").map(row => {
@@ -194,7 +193,6 @@ async function loadDataFromSheets() {
       return { type: cols[0], menu: cols[1], code: cols[2], price: parseFloat(cols[3]) || 0 };
     });
     
-    // Fetch Communities
     const cRes = await fetch(communitySheetURL);
     const cCsv = await cRes.text();
     const communities = cCsv.split("\n").slice(1).filter(r => r.trim() !== "");
@@ -202,13 +200,13 @@ async function loadDataFromSheets() {
     const commSelect = document.getElementById("communitySelect");
     communities.forEach(c => {
       const opt = document.createElement("option");
-      opt.value = c.trim();
-      opt.textContent = c.trim();
+      const cleanVal = c.replace(/[\r\n]/g, "").trim();
+      opt.value = cleanVal;
+      opt.textContent = cleanVal;
       commSelect.appendChild(opt);
     });
 
     document.getElementById("menuDisplayBody").innerHTML = menuData.map(m => `<tr><td>${m.type}</td><td>${m.menu}</td><td>${m.code}</td><td>${m.price.toFixed(2)}</td></tr>`).join('');
-    
     initPOS();
   } catch (e) { console.error("Sheet Loading Error:", e); }
 }
@@ -222,7 +220,6 @@ const lotInp = document.getElementById("lotRoom");
 const addrInp = document.getElementById("customerAddress");
 const notesInp = document.getElementById("specialInstructions");
 
-// ALL ORIGINAL LOGIC PRESERVED
 function initPOS() {
   const saved = localStorage.getItem("dukiks_history");
   if(saved) {
@@ -408,12 +405,13 @@ function startNewDay() { if(confirm("Clear All?")) { localStorage.clear(); locat
 
 function updateClock() {
   const now = new Date();
-  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   let hours = now.getHours(); const ampm = hours >= 12 ? 'PM' : 'AM'; hours = hours % 12 || 12;
-  document.getElementById('timePHT').textContent = `${hours.toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} ${ampm}`;
-  // RESTORED ORIGINAL FLOATING DATE FORMAT: Day, Month Date
-  document.getElementById('datePHT').textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate().toString().padStart(2, '0')}`;
+  // RESTORED SECONDS: HH:MM:SS AM/PM
+  document.getElementById('timePHT').textContent = `${hours.toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')} ${ampm}`;
+  // UPDATED DATE: Friday, March 13, 2026
+  document.getElementById('datePHT').textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
 }
 setInterval(updateClock, 1000);
 </script>
