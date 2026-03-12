@@ -43,15 +43,36 @@ td { color: black; border-bottom: 1px solid #eee; }
 .input-row label { font-weight: bold; color: black; margin-bottom: 5px; font-size: 14px;}
 .input-row input, .input-row select { padding: 8px; font-size: 16px; border: 2px solid #ccc; border-radius: 8px; transition: all 0.3s; width: 100%; box-sizing: border-box; }
 
-.side-by-side { display: flex; gap: 10px; justify-content: flex-start; }
-.side-by-side .input-row { flex: 0 1 auto; margin: 0; }
-.small-input { width: 80px !important; }
+/* Fixed Alignment for BLK/Lot fields to be small and side-by-side */
+.side-by-side { 
+  display: flex; 
+  gap: 10px; 
+  justify-content: flex-start; /* Keeps them to the left */
+  max-width: 850px; 
+  margin: 0 auto 12px auto; 
+}
+.side-by-side .input-row { 
+  flex: 0 0 auto; /* Prevents them from stretching */
+  margin: 0; 
+}
+.small-input { 
+  width: 80px !important; /* Forces the small width for 4 numbers */
+}
 
 .hidden-field { display: none; }
 
 .order-table { width: 100%; max-width: 850px; margin: 20px auto; border-collapse: collapse; }
 .order-table th, .order-table td { border: 1px solid #ccc; color: black; padding: 8px; }
-.order-table select, .order-table input { width: 100%; font-size: 16px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 5px; }
+.order-table select { width: 100%; font-size: 16px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 5px; }
+
+/* This makes the QTY input small (approx 4-5 digits wide) */
+.order-table input { 
+  width: 70px !important; 
+  font-size: 16px; 
+  text-align: center; 
+  border: 1px solid #ddd; 
+  border-radius: 5px; 
+}
 
 .action-btn {
   background-color: #000000; color: white; border: none; padding: 12px 20px; cursor: pointer; display: block; margin: 20px auto;
@@ -362,7 +383,6 @@ const addrInp = document.getElementById("customerAddress");
 const notesInp = document.getElementById("specialInstructions");
 
 window.onload = () => {
-  // 1. Load History
   const saved = localStorage.getItem("dukiks_history");
   if(saved) {
     historyBox.innerHTML = saved;
@@ -374,7 +394,6 @@ window.onload = () => {
     });
   }
 
-  // 2. Load Draft
   const savedDraft = localStorage.getItem("dukiks_draft");
   if(savedDraft) {
     const d = JSON.parse(savedDraft);
@@ -384,14 +403,9 @@ window.onload = () => {
     lotInp.value = d.lot || "";
     addrInp.value = d.addr || "";
     notesInp.value = d.notes || "";
-    
-    if(d.items && d.items.length > 0) {
-        d.items.forEach(item => addOrderRow(item.code, item.qty));
-    }
-    addOrderRow(); // Always add one empty row
-  } else {
+    if(d.items && d.items.length > 0) { d.items.forEach(item => addOrderRow(item.code, item.qty)); }
     addOrderRow();
-  }
+  } else { addOrderRow(); }
 
   updateTable();
   updateSummary();
@@ -406,16 +420,7 @@ function saveCurrentDraft() {
         const qty = row.querySelector("input").value;
         if(code) items.push({code, qty});
     });
-
-    const draft = {
-        name: nameInp.value,
-        comm: commInp.value,
-        blk: blkInp.value,
-        lot: lotInp.value,
-        addr: addrInp.value,
-        notes: notesInp.value,
-        items: items
-    };
+    const draft = { name: nameInp.value, comm: commInp.value, blk: blkInp.value, lot: lotInp.value, addr: addrInp.value, notes: notesInp.value, items: items };
     localStorage.setItem("dukiks_draft", JSON.stringify(draft));
 }
 
@@ -473,7 +478,6 @@ function updateSummary() {
   const rows = historyBox.querySelectorAll("tr");
   let totalSales = 0;
   let itemCounts = { "Fried Chicken": 0, "Pork Steak": 0, "Pork Chop": 0, "Vegetable Lumpia": 0, "Pork Lumpia": 0, "Rice": 0 };
-
   rows.forEach(row => {
     const priceText = row.cells[2].innerText.replace(/,/g, '');
     totalSales += parseFloat(priceText) || 0;
@@ -496,16 +500,11 @@ function updateSummary() {
       }
     });
   });
-
   document.getElementById("summaryTotalOrders").textContent = rows.length;
   document.getElementById("summaryTotalSales").textContent = formatPHP(totalSales);
-  
   let bestItem = "None"; let maxCount = 0;
-  for (const [name, count] of Object.entries(itemCounts)) {
-    if (count > maxCount && count > 0 && name !== "Rice") { maxCount = count; bestItem = name; }
-  }
+  for (const [name, count] of Object.entries(itemCounts)) { if (count > maxCount && count > 0 && name !== "Rice") { maxCount = count; bestItem = name; } }
   document.getElementById("summaryBestSeller").textContent = bestItem;
-
   const breakdownDiv = document.getElementById("itemBreakdown");
   if(breakdownDiv) {
     const displayOrder = ["Fried Chicken", "Pork Steak", "Pork Chop", "Vegetable Lumpia", "Pork Lumpia", "Rice"];
@@ -524,7 +523,6 @@ document.getElementById("startNewOrderBtn").onclick = function() {
   if (!nameInp.value.trim()) { nameInp.classList.add('error-bump'); valid = false; }
   if (comm === "Home") { if (!addrInp.value.trim()) { addrInp.classList.add('error-bump'); valid = false; }
   } else { if (!blkInp.value.trim()) { blkInp.classList.add('error-bump'); valid = false; } if (!lotInp.value.trim()) { lotInp.classList.add('error-bump'); valid = false; } }
-  
   const rows = orderBody.querySelectorAll("tr:not(#grandTotalRow)");
   let ordersCodes = []; let ordersPretty = []; let total = 0; let hasItem = false;
   rows.forEach(r => {
@@ -533,20 +531,16 @@ document.getElementById("startNewOrderBtn").onclick = function() {
     const item = menuData.find(m => m.code === code);
     if(item) { ordersCodes.push(`${qty}x ${item.code}`); ordersPretty.push(`${qty}x ${item.menu}`); total += item.price * qty; hasItem = true; }
   });
-  
   if(!valid || !hasItem) { document.getElementById("validationError").style.display = "block"; if(!hasItem) document.getElementById("orderTable").classList.add('error-bump'); return; }
   document.getElementById("validationError").style.display = "none";
-  
   const now = new Date();
   const month = (now.getMonth() + 1).toString().padStart(2, '0');
   const day = now.getDate().toString().padStart(2, '0');
   const year = now.getFullYear();
   let hours = now.getHours(); const ampm = hours >= 12 ? 'PM' : 'AM'; hours = hours % 12 || 12;
   const hStr = hours.toString().padStart(2, '0'); const mStr = now.getMinutes().toString().padStart(2, '0'); const sStr = now.getSeconds().toString().padStart(2, '0');
-  
   const refNum = `${month}${day}${year}-${hStr}${mStr}${sStr}${ampm}`;
   let fullAddress = (comm === "Home") ? addrInp.value : `${comm} - Blk ${blkInp.value}, Lot ${lotInp.value}`;
-
   const hRow = document.createElement("tr");
   hRow.innerHTML = `
     <td><button class="action-btn" style="width:auto; padding:5px 10px; margin:0; font-size:11px;" onclick="copyOrderSummary(this)">Copy</button></td>
@@ -566,70 +560,44 @@ document.getElementById("startNewOrderBtn").onclick = function() {
   `;
   historyBox.appendChild(hRow);
   saveHistory();
-  
   copyOrderSummary(hRow.querySelector('button'));
   localStorage.removeItem("dukiks_draft");
-
   this.textContent = "✅ Logged & Copied!";
   this.classList.add("success-state");
   setTimeout(() => { 
     this.textContent = "Log Order & Clear"; this.classList.remove("success-state");
-    nameInp.value = ""; addrInp.value = ""; notesInp.value = ""; 
-    blkInp.value = ""; lotInp.value = ""; commInp.value = "Home"; toggleAddressFields();
+    nameInp.value = ""; addrInp.value = ""; notesInp.value = ""; blkInp.value = ""; lotInp.value = ""; commInp.value = "Home"; toggleAddressFields();
     orderBody.innerHTML = ""; addOrderRow(); updateTable();
   }, 1000);
 };
 
 function copyOrderSummary(btn) {
   const row = btn.closest("tr");
-  const refNum    = row.cells[9].innerText;
-  const dateStr   = row.cells[11].innerText;
-  const timeStr   = row.cells[12].innerText;
-  const name      = row.cells[5].innerText;
-  const addr      = row.cells[6].innerText;
-  const total     = row.cells[2].innerText;
-  const notes     = row.cells[8].innerText;
-  const ordersRaw = row.cells[13].innerText;
-
+  const refNum = row.cells[9].innerText; const dateStr = row.cells[11].innerText; const timeStr = row.cells[12].innerText;
+  const name = row.cells[5].innerText; const addr = row.cells[6].innerText; const total = row.cells[2].innerText;
+  const notes = row.cells[8].innerText; const ordersRaw = row.cells[13].innerText;
   let addrParts = addr.split(" - ");
   let commCode = addrParts[0].substring(0,3).toUpperCase();
-  let blk = blkInp.value || (addrParts[1] ? addrParts[1].match(/\d+/g)?.[0] : "0") || "0";
-  let lot = lotInp.value || (addrParts[1] ? addrParts[1].match(/\d+/g)?.[1] : "0") || "0";
-  let shortAddr = `${commCode} ${blk}/${lot}`;
-
+  let b = blkInp.value || (addrParts[1] ? addrParts[1].match(/\d+/g)?.[0] : "0") || "0";
+  let l = lotInp.value || (addrParts[1] ? addrParts[1].match(/\d+/g)?.[1] : "0") || "0";
+  let shortAddr = `${commCode} ${b}/${l}`;
   const orderCodes = ordersRaw.split(", ");
-  const fullOrderNames = orderCodes.map(item => {
-    const parts = item.split("x ");
-    const qty = parts[0]; const code = parts[1];
-    const menuItem = menuData.find(m => m.code === code);
-    return `${qty}x ${menuItem ? menuItem.menu : code}`;
-  }).join("\n");
-
+  const fullOrderNames = orderCodes.map(item => { const parts = item.split("x "); const q = parts[0]; const c = parts[1]; const m = menuData.find(x => x.code === c); return `${q}x ${m ? m.menu : c}`; }).join("\n");
   const summary = `${refNum}\n${dateStr} ${timeStr}\nName: ${name}\nAddress: ${addr}\n\n${shortAddr} ₱${total}\n\nOrders:\n${fullOrderNames}\n\nSpecial Notes: ${notes}`;
   navigator.clipboard.writeText(summary);
   window.location.href = "fb-messenger://user-thread/1629578618166443";
   setTimeout(() => { if (document.hasFocus()) { window.open("https://www.messenger.com/t/1629578618166443", "_blank"); } }, 500);
-
-  const originalText = btn.innerText; btn.innerText = "✅";
-  setTimeout(() => { btn.innerText = originalText; }, 1500);
+  const ot = btn.innerText; btn.innerText = "✅"; setTimeout(() => { btn.innerText = ot; }, 1500);
 }
 
 function copyReceipt(btn) {
-  const row = btn.closest("tr");
-  const total = row.cells[2].innerText;
-  const ordersRaw = row.cells[13].innerText;
+  const row = btn.closest("tr"); const total = row.cells[2].innerText; const ordersRaw = row.cells[13].innerText;
   const orderCodes = ordersRaw.split(", ");
-  const fullOrderNames = orderCodes.map(item => {
-    const parts = item.split("x ");
-    const qty = parts[0]; const code = parts[1];
-    const menuItem = menuData.find(m => m.code === code);
-    return `${qty}x ${menuItem ? menuItem.menu : code}`;
-  }).join("\n");
-
+  const fullOrderNames = orderCodes.map(item => { const parts = item.split("x "); const q = parts[0]; const c = parts[1]; const m = menuData.find(x => x.code === c); return `${q}x ${m ? m.menu : c}`; }).join("\n");
   const receipt = `${fullOrderNames}\nTotal Amount: ₱${total}`;
   navigator.clipboard.writeText(receipt);
-  const originalText = btn.innerText; btn.innerText = "✅"; btn.style.backgroundColor = "#28a745";
-  setTimeout(() => { btn.innerText = originalText; btn.style.backgroundColor = "#007bff"; }, 1500);
+  const ot = btn.innerText; btn.innerText = "✅"; btn.style.backgroundColor = "#28a745";
+  setTimeout(() => { btn.innerText = ot; btn.style.backgroundColor = "#007bff"; }, 1500);
 }
 
 function deleteRow(btn) { if(confirm("Delete this order?")) { btn.parentElement.parentElement.remove(); saveHistory(); } }
@@ -642,15 +610,16 @@ document.getElementById("copyTableBtn").onclick = function() {
     text += rowData.join("\t") + "\n";
   });
   navigator.clipboard.writeText(text);
-  window.open("https://docs.google.com/spreadsheets/d/1Y0fxsaI3jva56h42jg9jRq1FS6vmbXmxl5X2e-cc69I/edit?gid=1589209915#gid=1589209915", "_blank");
+  // Using googlesheets:// to trigger app launch on mobile
+  window.location.href = "googlesheets://https://docs.google.com/spreadsheets/d/1Y0fxsaI3jva56h42jg9jRq1FS6vmbXmxl5X2e-cc69I/edit?gid=1589209915#gid=1589209915";
+  setTimeout(() => { if (document.hasFocus()) { window.open("https://docs.google.com/spreadsheets/d/1Y0fxsaI3jva56h42jg9jRq1FS6vmbXmxl5X2e-cc69I/edit?gid=1589209915#gid=1589209915", "_blank"); } }, 500);
 };
 
 function updateClock() {
   const now = new Date();
-  const timeDiv = document.getElementById('timePHT');
-  const dateDiv = document.getElementById('datePHT');
-  if(timeDiv) { let hours = now.getHours(); const ampm = hours >= 12 ? 'PM' : 'AM'; hours = hours % 12 || 12; const h = hours.toString().padStart(2, '0'); const m = now.getMinutes().toString().padStart(2, '0'); const s = now.getSeconds().toString().padStart(2, '0'); timeDiv.textContent = `${h}:${m}:${s} ${ampm}`; }
-  if(dateDiv) dateDiv.textContent = now.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'2-digit', year:'numeric'});
+  const t = document.getElementById('timePHT'); const d = document.getElementById('datePHT');
+  if(t) { let h = now.getHours(); const a = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; const hS = h.toString().padStart(2, '0'); const mS = now.getMinutes().toString().padStart(2, '0'); const sS = now.getSeconds().toString().padStart(2, '0'); t.textContent = `${hS}:${mS}:${sS} ${a}`; }
+  if(d) d.textContent = now.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'2-digit', year:'numeric'});
 }
 setInterval(updateClock, 1000);
 </script>
