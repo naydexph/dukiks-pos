@@ -167,7 +167,7 @@ td { color: black; border-bottom: 1px solid #eee; }
   <div style="overflow-x:auto;">
     <table class="history-table" id="mainHistoryTable">
       <thead>
-        <tr><th>Copy</th><th>Receipt</th><th>Total</th><th>Status</th><th>Mode</th><th>Name</th><th>Address</th><th>Orders</th><th>Notes</th><th>Order#</th><th>Action</th></tr>
+        <tr><th>Copy</th><th>Receipt</th><th>Total</th><th>Status</th><th>Mode</th><th>Name</th><th>Address</th><th>Orders</th><th>Notes</th><th>Order#</th><th>Action</th><th style="display:none">D</th><th style="display:none">T</th><th style="display:none">Raw</th></tr>
       </thead>
       <tbody id="historyBox"></tbody>
     </table>
@@ -390,20 +390,12 @@ document.getElementById("startNewOrderBtn").onclick = function() {
   setTimeout(() => { location.reload(); }, 800);
 };
 
-function showBtnConfirmation(btn, originalText) {
-  btn.textContent = "✅";
-  btn.classList.add("success-state");
-  setTimeout(() => {
-    btn.textContent = originalText;
-    btn.classList.remove("success-state");
-  }, 2000);
-}
-
 function copyOrderSummary(btn) {
   const row = btn.closest("tr");
   const summary = `${row.cells[9].innerText}\n${row.cells[11].innerText} ${row.cells[12].innerText}\nName: ${row.cells[5].innerText}\nAddress: ${row.cells[6].innerText}\n\nOrders:\n${row.cells[7].innerText.replace(/<br>/g, '\n')}\n\nNotes: ${row.cells[8].innerText}`;
   navigator.clipboard.writeText(summary);
-  showBtnConfirmation(btn, "Copy");
+  const ot = btn.innerText; btn.innerText = "✅";
+  setTimeout(() => { btn.innerText = ot; }, 1500);
   window.location.href = "fb-messenger://user-thread/1629578618166443";
 }
 
@@ -411,17 +403,20 @@ function copyReceipt(btn) {
   const row = btn.closest("tr");
   const receipt = `${row.cells[7].innerText.replace(/<br>/g, '\n')}\nTotal: ₱${row.cells[2].innerText}`;
   navigator.clipboard.writeText(receipt);
-  showBtnConfirmation(btn, "Receipt");
+  const ot = btn.innerText; btn.innerText = "✅";
+  setTimeout(() => { btn.innerText = ot; }, 1500);
 }
 
 function copyEntireTable(btn) {
-  let range = document.createRange();
-  range.selectNode(document.getElementById("mainHistoryTable"));
-  window.getSelection().removeAllRanges();
-  window.getSelection().addRange(range);
-  document.execCommand("copy");
-  window.getSelection().removeAllRanges();
-  showBtnConfirmation(btn, "⧉ Submit Sales Log");
+  let text = "";
+  historyBox.querySelectorAll("tr").forEach(r => {
+    const rowData = [ r.cells[9].innerText, r.cells[11].innerText, r.cells[12].innerText, r.cells[5].innerText, r.cells[6].innerText, r.cells[2].innerText, r.cells[3].querySelector('select').value, r.cells[4].querySelector('select').value, r.cells[13].innerText, r.cells[8].innerText ];
+    text += rowData.join("\t") + "\n";
+  });
+  navigator.clipboard.writeText(text);
+  const ot = btn.innerText; btn.innerText = "✅";
+  setTimeout(() => { btn.innerText = ot; }, 1500);
+  window.location.href = "googlesheets://https://docs.google.com/spreadsheets/d/1Y0fxsaI3jva56h42jg9jRq1FS6vmbXmxl5X2e-cc69I/edit?gid=1589209915#gid=1589209915";
 }
 
 function deleteRow(btn) { if(confirm("Delete?")) { btn.closest("tr").remove(); saveHistory(); } }
@@ -429,13 +424,15 @@ function startNewDay() { if(confirm("Clear All?")) { localStorage.clear(); locat
 
 function updateClock() {
   const now = new Date();
-  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  let hours = now.getHours(); const ampm = hours >= 12 ? 'PM' : 'AM'; hours = hours % 12 || 12;
-  document.getElementById('timePHT').textContent = `${hours.toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')} ${ampm}`;
-  document.getElementById('datePHT').textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+  const t = document.getElementById('timePHT'); const d = document.getElementById('datePHT');
+  if(t) { 
+    let h = now.getHours(); const a = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
+    t.textContent = `${h.toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')} ${a}`; 
+  }
+  if(d) d.textContent = now.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'2-digit', year:'numeric'});
 }
 setInterval(updateClock, 1000);
 </script>
 </body>
 </html>
+``` [cite: 127, 245, 246, 247, 251, 252]
