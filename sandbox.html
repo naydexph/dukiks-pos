@@ -120,7 +120,7 @@ td { color: black; border-bottom: 1px solid #eee; }
     <label>Community <span class="required-star">*</span></label>
     <select id="communitySelect" onchange="toggleAddressFields(); saveCurrentDraft();">
       <option value="Home">Home Address (Not a Subdivision)</option>
-    </select>
+      </select>
   </div>
 
   <div id="subdivisionGroup" class="hidden-field side-by-side">
@@ -180,7 +180,7 @@ td { color: black; border-bottom: 1px solid #eee; }
 <script>
 // --- SHEET SYNC LOGIC ---
 const menuSheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUovN3y6yfyLJ0yLVqvrvEEUaipZ3gf6mkuSqJ4oBOg0cEVNwwDs9PC6TH2U0u9kE4a3jEaugquiGg/pub?gid=159409582&single=true&output=csv";
-const communitySheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUovN3y6yfyLJ0yLVqvrvEEUaipZ3gf6mkuSqJ4oBOg0cEVNwwDs9PC6TH2U0u9kE4a3jEaugquiGg/pub?gid=2021575806&single=true&output=csv";
+const communitySheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUovN3y6yfyLJ0yLVqvrvEEUaipZ3gf6mkuSqJ4oBOg0cEVNwwDs9PC6TH2U0u9kE4a3jEaugquiGg/pub?gid=1695333389&single=true&output=csv";
 
 let menuData = [];
 
@@ -200,9 +200,8 @@ async function loadDataFromSheets() {
     const commSelect = document.getElementById("communitySelect");
     communities.forEach(c => {
       const opt = document.createElement("option");
-      const cleanVal = c.replace(/[\r\n]/g, "").trim();
-      opt.value = cleanVal;
-      opt.textContent = cleanVal;
+      opt.value = c.trim();
+      opt.textContent = c.trim();
       commSelect.appendChild(opt);
     });
 
@@ -382,7 +381,6 @@ document.getElementById("startNewOrderBtn").onclick = function() {
   historyBox.appendChild(hRow);
   saveHistory();
   
-  // Show confirmation on current button
   const originalText = this.textContent;
   this.textContent = "✅ Logged!";
   this.classList.add("success-state");
@@ -430,11 +428,11 @@ function startNewDay() { if(confirm("Clear All?")) { localStorage.clear(); locat
 
 function updateClock() {
   const now = new Date();
-  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   let hours = now.getHours(); const ampm = hours >= 12 ? 'PM' : 'AM'; hours = hours % 12 || 12;
   document.getElementById('timePHT').textContent = `${hours.toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')} ${ampm}`;
-  document.getElementById('datePHT').textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+  document.getElementById('datePHT').textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate().toString().padStart(2, '0')}`;
 }
 setInterval(updateClock, 1000);
 </script>
