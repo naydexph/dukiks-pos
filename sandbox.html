@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DUKIKS POS</title>
+<title>DUKIKS POS - SANDBOX</title>
 <style>
 body {
   font-family: Arial, sans-serif;
@@ -43,20 +43,19 @@ td { color: black; border-bottom: 1px solid #eee; }
 .input-row label { font-weight: bold; color: black; margin-bottom: 5px; font-size: 14px;}
 .input-row input, .input-row select { padding: 8px; font-size: 16px; border: 2px solid #ccc; border-radius: 8px; transition: all 0.3s; width: 100%; box-sizing: border-box; }
 
-/* Fixed Alignment for BLK/Lot fields to be small and side-by-side */
 .side-by-side { 
   display: flex; 
   gap: 10px; 
-  justify-content: flex-start; /* Keeps them to the left */
+  justify-content: flex-start; 
   max-width: 850px; 
   margin: 0 auto 12px auto; 
 }
 .side-by-side .input-row { 
-  flex: 0 0 auto; /* Prevents them from stretching */
+  flex: 0 0 auto; 
   margin: 0; 
 }
 .small-input { 
-  width: 80px !important; /* Forces the small width for 4 numbers */
+  width: 80px !important; 
 }
 
 .hidden-field { display: none; }
@@ -65,7 +64,6 @@ td { color: black; border-bottom: 1px solid #eee; }
 .order-table th, .order-table td { border: 1px solid #ccc; color: black; padding: 8px; }
 .order-table select { width: 100%; font-size: 16px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 5px; }
 
-/* This makes the QTY input small (approx 4-5 digits wide) */
 .order-table input { 
   width: 70px !important; 
   font-size: 16px; 
@@ -112,7 +110,6 @@ td { color: black; border-bottom: 1px solid #eee; }
     50% { transform: translateX(5px); } 
     75% { transform: translateX(-5px); } 
 }
-
 </style>
 </head>
 <body>
@@ -130,20 +127,11 @@ td { color: black; border-bottom: 1px solid #eee; }
 <div class="subtitle">Order Intake Form</div>
 
 <div class="panel">
-  <table>
+  <table id="liveMenuTable">
     <thead><tr><th>Type</th><th>Menu</th><th>Code</th><th>Price</th></tr></thead>
-    <tr><td>Combo</td><td>1pc Fried Chicken with Rice</td><td>1FCWR</td><td>62.00</td></tr>
-    <tr><td>Combo</td><td>2pc Fried Chicken with Rice</td><td>2FCWR</td><td>109.00</td></tr>
-    <tr><td>Combo</td><td>Pork Steak with Rice</td><td>PSWR</td><td>149.00</td></tr>
-    <tr><td>Combo</td><td>Pork Chop with Rice</td><td>PCWR</td><td>75.00</td></tr>
-    <tr><td>A la carte</td><td>1pc Fried Chicken (A la carte)</td><td>1FCALC</td><td>47.00</td></tr>
-    <tr><td>A la carte</td><td>2pc Fried Chicken (A la carte)</td><td>2FCALC</td><td>94.00</td></tr>
-    <tr><td>A la carte</td><td>Pork Steak (A la carte)</td><td>PSALC</td><td>134.00</td></tr>
-    <tr><td>A la carte</td><td>Pork Chop (A la carte)</td><td>PCALC</td><td>60.00</td></tr>
-    <tr><td>A la carte</td><td>3pc Vegetable Lumpia (A la carte)</td><td>3VL</td><td>30.00</td></tr>
-    <tr><td>A la carte</td><td>3pc Pork Lumpia (A la carte)</td><td>3PL</td><td>21.00</td></tr>
-    <tr><td>Add-on</td><td>Extra Rice</td><td>EXRice</td><td>15.00</td></tr>
-    <tr><td>Add-on</td><td>Extra Sauce</td><td>EXSauce</td><td>15.00</td></tr>
+    <tbody id="menuTableBody">
+        <tr><td colspan="4" style="text-align:center;">Loading menu from Google Sheets...</td></tr>
+    </tbody>
   </table>
 </div>
 
@@ -353,25 +341,11 @@ td { color: black; border-bottom: 1px solid #eee; }
 </div>
 
 <button class="action-btn" id="newDayBtn" onclick="startNewDay()">Start a New Day</button>
-<small style="display:block; text-align:center; color:#FFFFFF; margin-top:-10px; margin-bottom:20px; font-size: 12px; font-weight: bold;">
-  ⚠️ Warning: This button will permanently delete all order history and reset the day.
-</small>
 
 <script>
-const menuData = [
-  {menu:"1pc Fried Chicken with Rice", code:"1FCWR", price:62},
-  {menu:"2pc Fried Chicken with Rice", code:"2FCWR", price:109},
-  {menu:"Pork Steak with Rice", code:"PSWR", price:149},
-  {menu:"Pork Chop with Rice", code:"PCWR", price:75},
-  {menu:"1pc Fried Chicken (A la carte)", code:"1FCALC", price:47},
-  {menu:"2pc Fried Chicken (A la carte)", code:"2FCALC", price:94},
-  {menu:"Pork Steak (A la carte)", code:"PSALC", price:134},
-  {menu:"Pork Chop (A la carte)", code:"PCALC", price:60},
-  {menu:"3pc Vegetable Lumpia (A la carte)", code:"3VL", price:30},
-  {menu:"3pc Pork Lumpia (A la carte)", code:"3PL", price:21},
-  {menu:"Extra Rice", code:"EXRice", price:15},
-  {menu:"Extra Sauce", code:"EXSauce", price:15},
-];
+// --- LIVE CONFIG ---
+let menuData = [];
+const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUovN3y6yfyLJ0yLVqvrvEEUaipZ3gf6mkuSqJ4oBOg0cEVNwwDs9PC6TH2U0u9kE4a3jEaugquiGg/pub?gid=159409582&single=true&output=csv";
 
 const orderBody = document.getElementById("orderBody");
 const historyBox = document.getElementById("historyBox");
@@ -382,7 +356,38 @@ const lotInp = document.getElementById("lotRoom");
 const addrInp = document.getElementById("customerAddress");
 const notesInp = document.getElementById("specialInstructions");
 
-window.onload = () => {
+// FETCH GOOGLE SHEET DATA
+async function fetchMenu() {
+  try {
+    const response = await fetch(sheetURL);
+    const data = await response.text();
+    const rows = data.split("\n").slice(1); // Skip header
+    
+    menuData = rows.filter(r => r.trim() !== "").map(row => {
+      const cols = row.split(",");
+      return { 
+        type: cols[0]?.trim(), 
+        menu: cols[1]?.trim(), 
+        code: cols[2]?.trim(), 
+        price: parseFloat(cols[3]) || 0 
+      };
+    });
+
+    renderMenuTable();
+    loadSession(); // Load drafts/history after menu is ready
+  } catch (e) {
+    console.error("Fetch failed", e);
+  }
+}
+
+function renderMenuTable() {
+    const tableBody = document.getElementById("menuTableBody");
+    tableBody.innerHTML = menuData.map(m => 
+        `<tr><td>${m.type}</td><td>${m.menu}</td><td>${m.code}</td><td>${formatPHP(m.price)}</td></tr>`
+    ).join('');
+}
+
+function loadSession() {
   const saved = localStorage.getItem("dukiks_history");
   if(saved) {
     historyBox.innerHTML = saved;
@@ -411,7 +416,9 @@ window.onload = () => {
   updateSummary();
   updateClock();
   toggleAddressFields();
-};
+}
+
+window.onload = fetchMenu;
 
 function saveCurrentDraft() {
     const items = [];
@@ -596,33 +603,28 @@ function copyReceipt(btn) {
   const fullOrderNames = orderCodes.map(item => { const parts = item.split("x "); const q = parts[0]; const c = parts[1]; const m = menuData.find(x => x.code === c); return `${q}x ${m ? m.menu : c}`; }).join("\n");
   const receipt = `${fullOrderNames}\nTotal Amount: ₱${total}`;
   navigator.clipboard.writeText(receipt);
-  const ot = btn.innerText; btn.innerText = "✅"; btn.style.backgroundColor = "#28a745";
-  setTimeout(() => { btn.innerText = ot; btn.style.backgroundColor = "#007bff"; }, 1500);
+  const ot = btn.innerText; btn.innerText = "✅"; btn.style.backgroundColor = "#28a745"; setTimeout(() => { btn.innerText = "Receipt"; btn.style.backgroundColor = "#007bff"; }, 1500);
 }
 
-function deleteRow(btn) { if(confirm("Delete this order?")) { btn.parentElement.parentElement.remove(); saveHistory(); } }
-function startNewDay() { if(confirm("Reset all data?")) { localStorage.clear(); historyBox.innerHTML = ""; updateSummary(); location.reload(); } }
+function deleteRow(btn) { if(confirm("Delete this order?")) { btn.closest("tr").remove(); saveHistory(); } }
+function startNewDay() { if(confirm("WARNING: This will clear all history for a new day. Proceed?")) { localStorage.clear(); location.reload(); } }
 
 document.getElementById("copyTableBtn").onclick = function() {
-  let text = "";
+  let text = "Order#\tDate\tTime\tName\tAddress\tTotal\tStatus\tMode\tOrders\tNotes\n";
   historyBox.querySelectorAll("tr").forEach(r => {
-    const rowData = [ r.cells[9].innerText, r.cells[11].innerText, r.cells[12].innerText, r.cells[5].innerText, r.cells[6].innerText, r.cells[2].innerText, r.cells[3].querySelector('select').value, r.cells[4].querySelector('select').value, r.cells[13].innerText, r.cells[8].innerText ];
-    text += rowData.join("\t") + "\n";
+    const rd = [r.cells[9].innerText, r.cells[11].innerText, r.cells[12].innerText, r.cells[5].innerText, r.cells[6].innerText, r.cells[2].innerText, r.cells[3].querySelector('select').value, r.cells[4].querySelector('select').value, r.cells[13].innerText, r.cells[8].innerText];
+    text += rd.join("\t") + "\n";
   });
   navigator.clipboard.writeText(text);
-  // Using googlesheets:// to trigger app launch on mobile
-  window.location.href = "googlesheets://https://docs.google.com/spreadsheets/d/1Y0fxsaI3jva56h42jg9jRq1FS6vmbXmxl5X2e-cc69I/edit?gid=1589209915#gid=1589209915";
-  setTimeout(() => { if (document.hasFocus()) { window.open("https://docs.google.com/spreadsheets/d/1Y0fxsaI3jva56h42jg9jRq1FS6vmbXmxl5X2e-cc69I/edit?gid=1589209915#gid=1589209915", "_blank"); } }, 500);
+  window.open("https://docs.google.com/spreadsheets/d/1Y0fxsaI3jva56h42jg9jRq1FS6vmbXmxl5X2e-cc69I/edit?gid=1589209915#gid=1589209915", "_blank");
 };
 
 function updateClock() {
   const now = new Date();
-  const t = document.getElementById('timePHT'); const d = document.getElementById('datePHT');
-  if(t) { let h = now.getHours(); const a = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; const hS = h.toString().padStart(2, '0'); const mS = now.getMinutes().toString().padStart(2, '0'); const sS = now.getSeconds().toString().padStart(2, '0'); t.textContent = `${hS}:${mS}:${sS} ${a}`; }
-  if(d) d.textContent = now.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'2-digit', year:'numeric'});
+  document.getElementById('timePHT').textContent = now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true});
+  document.getElementById('datePHT').textContent = now.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'2-digit'});
 }
 setInterval(updateClock, 1000);
 </script>
-
 </body>
 </html>
