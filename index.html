@@ -8,70 +8,77 @@
 body {
   font-family: Arial, sans-serif;
   margin: 0;
-  padding: 110px 20px 40px 20px;
+  padding: 80px 10px 40px 10px;
   background-color: #ff6b00;
-  font-size: 22px;
+  font-size: 16px;
 }
 
-.logo-container { text-align: center; margin-top: 20px; }
-.logo-container img { max-height: 150px; width: auto; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
+.logo-container { text-align: center; margin-top: 10px; }
+.logo-container img { max-height: 80px; width: auto; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
 
-h1 { text-align: center; font-weight: bold; font-size: 40px; color: white; margin-top: 10px; }
+h1 { text-align: center; font-weight: bold; font-size: 28px; color: white; margin-top: 5px; }
 .subtitle { text-align: center; font-size: 11px; color: white; margin-bottom: 30px; }
 
 .panel { max-width: 1000px; width: 100%; margin: 0 auto 40px auto; box-sizing: border-box; }
 
 #orderTable th {
     color: white !important;
-    background-color: black; /* Just to be sure */
+    background-color: black; 
 }
 
-table { border-collapse: collapse; border-radius: 10px; overflow: hidden; background: white; width: 100%; }
-th, td { padding: 10px 15px; text-align: left; }
-th { background-color: black; color: white; }
+table { border-collapse: collapse; border-radius: 10px; overflow: hidden; background: white; width: 100%; font-size: 14px; }
+th, td { padding: 8px 10px; text-align: left; }
+th { background-color: black; color: white !important; }
 td { color: black; border-bottom: 1px solid #eee; }
 
-.white-panel { background-color: white; padding: 25px; border-radius: 15px; }
-.white-panel h2 { text-align: center; color: black; margin-bottom: 22px; }
+.white-panel { background-color: white; padding: 15px; border-radius: 15px; }
+.white-panel h2 { text-align: center; color: black; margin-bottom: 22px; font-size: 20px; }
 
-.summary-container { display: flex; justify-content: space-between; gap: 15px; margin-bottom: 20px; }
-.summary-card { background: black; color: white; padding: 15px; border-radius: 12px; flex: 1; text-align: center; box-shadow: 0 4px #333; }
-.summary-card div { font-size: 12px; text-transform: uppercase; margin-bottom: 5px; color: #ff6b00; }
-.summary-card span { font-size: 22px; font-weight: bold; }
+.summary-container { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px; }
+.summary-card { background: black; color: white; padding: 10px; border-radius: 12px; flex: 1; text-align: center; box-shadow: 0 4px #333; }
+.summary-card div { font-size: 10px; text-transform: uppercase; margin-bottom: 5px; color: #ff6b00; }
+.summary-card span { font-size: 16px; font-weight: bold; }
 
-.input-row { display: flex; flex-direction: column; margin-bottom: 15px; max-width: 850px; margin: 0 auto 15px auto; }
-.input-row label { font-weight: bold; color: black; margin-bottom: 5px;}
-.input-row input, .input-row select { padding: 10px; font-size: 22px; border: 2px solid #ccc; border-radius: 8px; transition: all 0.3s; width: 100%; box-sizing: border-box; }
+.input-row { display: flex; flex-direction: column; margin-bottom: 12px; max-width: 850px; margin: 0 auto 12px auto; }
+.input-row label { font-weight: bold; color: black; margin-bottom: 5px; font-size: 14px;}
+.input-row input, .input-row select { padding: 8px; font-size: 16px; border: 2px solid #ccc; border-radius: 8px; transition: all 0.3s; width: 100%; box-sizing: border-box; }
+
+.side-by-side { display: flex; gap: 10px; justify-content: flex-start; }
+.side-by-side .input-row { flex: 0 1 auto; margin: 0; }
+.small-input { width: 80px !important; }
 
 .hidden-field { display: none; }
 
 .order-table { width: 100%; max-width: 850px; margin: 20px auto; border-collapse: collapse; }
-.order-table th, .order-table td { border: 1px solid #ccc; color: black; padding: 10px; }
-.order-table select, .order-table input { width: 100%; font-size: 22px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 5px; }
+.order-table th, .order-table td { border: 1px solid #ccc; color: black; padding: 8px; }
+.order-table select, .order-table input { width: 100%; font-size: 16px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 5px; }
 
 .action-btn {
-  background-color: #000000; color: white; border: none; padding: 15px 40px; cursor: pointer; display: block; margin: 20px auto;
-  font-size: 18px; font-weight: bold; border-radius: 12px; width: 320px; text-align: center;
+  background-color: #000000; color: white; border: none; padding: 12px 20px; cursor: pointer; display: block; margin: 20px auto;
+  font-size: 16px; font-weight: bold; border-radius: 12px; width: 100%; max-width: 320px; text-align: center;
   box-shadow: 0 6px #333; transition: all 0.2s; position: relative;
 }
 .action-btn:hover { background-color: #ff6b00; box-shadow: 0 6px #b34a00; }
 .action-btn:active { box-shadow: 0 2px #333; transform: translateY(4px); }
 
-.del-btn { background: none; border: none; cursor: pointer; font-size: 24px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
-.history-select { padding: 4px; border-radius: 4px; border: 1px solid #ccc; font-size: 13px; }
+#newDayBtn { background-color: #ff3b30; box-shadow: 0 6px #8b1a14; }
+#newDayBtn:hover { background-color: #d32f2f; }
+
+.del-btn { background: none; border: none; cursor: pointer; font-size: 20px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+.history-select { padding: 4px; border-radius: 4px; border: 1px solid #ccc; font-size: 12px; }
 .success-state { background-color: #4cd964 !important; box-shadow: 0 6px #38a84d !important; }
-.error-msg { color: #ff3b30; font-size: 16px; text-align: center; font-weight: bold; margin-bottom: 15px; display: none; }
+.error-msg { color: #ff3b30; font-size: 14px; text-align: center; font-weight: bold; margin-bottom: 15px; display: none; }
 
-.history-panel { background-color: white; border-radius: 10px; padding: 20px; }
-.history-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 10px; }
-.history-table th, .history-table td { border: 1px solid #ccc; padding: 8px; color: black; }
-.history-table th { background-color: #f0f0f0; }
+.history-panel { background-color: white; border-radius: 10px; padding: 15px; }
+.history-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
+.history-table th, .history-table td { border: 1px solid #ccc; padding: 6px; color: black; }
+.history-table th { background-color: black; color: white !important; }
 
-.floating-datetime { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.85); padding: 10px 25px; border-radius: 50px; text-align: center; z-index: 9999; color: white; }
-.digital-time { font-size: 30px; font-weight: bold; line-height: 1; }
-.date-display { font-size: 16px; margin-top: 5px; }
+.floating-datetime { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.85); padding: 5px 15px; border-radius: 50px; text-align: center; z-index: 9999; color: white; width: 80%; }
+.digital-time { font-size: 20px; font-weight: bold; line-height: 1; }
+.date-display { font-size: 12px; margin-top: 3px; }
 
-.required-star { color: #ff3b30; font-size: 14px; margin-left: 4px; }
+.required-star { color: #ff3b30; font-size: 12px; margin-left: 4px; }
 
 .error-bump { 
     border: 2px solid #ff3b30 !important; 
@@ -103,15 +110,19 @@ td { color: black; border-bottom: 1px solid #eee; }
 
 <div class="panel">
   <table>
-    <tr><th>Type</th><th>Menu</th><th>Code</th><th>Price</th></tr>
-    <tr><td>Meal</td><td>Pork Steak with rice</td><td>PSWR</td><td>₱149.00</td></tr>
-    <tr><td>Meal</td><td>Fried Chicken with rice</td><td>FCWR</td><td>₱109.00</td></tr>
-    <tr><td>Meal</td><td>Pork Chop with rice</td><td>PCWR</td><td>₱75.00</td></tr>
-    <tr><td>Meal</td><td>Pork Steak no rice</td><td>PSNR</td><td>₱134.00</td></tr>
-    <tr><td>Meal</td><td>Fried Chicken no rice</td><td>FCNR</td><td>₱94.00</td></tr>
-    <tr><td>Meal</td><td>Pork Chop no rice</td><td>PCNR</td><td>₱60.00</td></tr>
-    <tr><td>Add-on</td><td>Extra Rice</td><td>ERice</td><td>₱15.00</td></tr>
-    <tr><td>Add-on</td><td>Extra Sauce</td><td>ESauce</td><td>₱15.00</td></tr>
+    <thead><tr><th>Type</th><th>Menu</th><th>Code</th><th>Price</th></tr></thead>
+    <tr><td>Combo</td><td>1pc Fried Chicken with Rice</td><td>1FCWR</td><td>62.00</td></tr>
+    <tr><td>Combo</td><td>2pc Fried Chicken with Rice</td><td>2FCWR</td><td>109.00</td></tr>
+    <tr><td>Combo</td><td>Pork Steak with Rice</td><td>PSWR</td><td>149.00</td></tr>
+    <tr><td>Combo</td><td>Pork Chop with Rice</td><td>PCWR</td><td>75.00</td></tr>
+    <tr><td>A la carte</td><td>1pc Fried Chicken (A la carte)</td><td>1FCALC</td><td>47.00</td></tr>
+    <tr><td>A la carte</td><td>2pc Fried Chicken (A la carte)</td><td>2FCALC</td><td>94.00</td></tr>
+    <tr><td>A la carte</td><td>Pork Steak (A la carte)</td><td>PSALC</td><td>134.00</td></tr>
+    <tr><td>A la carte</td><td>Pork Chop (A la carte)</td><td>PCALC</td><td>60.00</td></tr>
+    <tr><td>A la carte</td><td>3pc Vegetable Lumpia (A la carte)</td><td>3VL</td><td>30.00</td></tr>
+    <tr><td>A la carte</td><td>3pc Pork Lumpia (A la carte)</td><td>3PL</td><td>21.00</td></tr>
+    <tr><td>Add-on</td><td>Extra Rice</td><td>EXRice</td><td>15.00</td></tr>
+    <tr><td>Add-on</td><td>Extra Sauce</td><td>EXSauce</td><td>15.00</td></tr>
   </table>
 </div>
 
@@ -251,14 +262,14 @@ td { color: black; border-bottom: 1px solid #eee; }
     </select>
   </div>
 
-  <div id="subdivisionGroup" class="hidden-field">
+  <div id="subdivisionGroup" class="hidden-field side-by-side">
     <div class="input-row">
-      <label>Block/Floor# <span class="required-star">*</span></label>
-      <input type="text" id="blockFloor" placeholder="Numbers only" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+      <label>BLK/Floor <span class="required-star">*</span></label>
+      <input type="text" id="blockFloor" class="small-input" placeholder="000" oninput="this.value = this.value.replace(/[^0-9]/g, '').substring(0,4)">
     </div>
     <div class="input-row">
-      <label>Lot/Room# <span class="required-star">*</span></label>
-      <input type="text" id="lotRoom" placeholder="Numbers only" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+      <label>Lot/Room <span class="required-star">*</span></label>
+      <input type="text" id="lotRoom" class="small-input" placeholder="000" oninput="this.value = this.value.replace(/[^0-9]/g, '').substring(0,4)">
     </div>
   </div>
 
@@ -269,20 +280,20 @@ td { color: black; border-bottom: 1px solid #eee; }
     </div>
   </div>
   
-  <div class="input-row">
-    <label>Notes</label>
-    <input type="text" id="specialInstructions" placeholder="Special Instructions">
-  </div>
-  
   <table class="order-table" id="orderTable">
     <thead><tr><th>Order <span class="required-star">*</span></th><th>Qty</th><th>Price</th></tr></thead>
     <tbody id="orderBody"></tbody>
   </table>
 
+  <div class="input-row">
+    <label>Notes</label>
+    <input type="text" id="specialInstructions" placeholder="Special Instructions">
+  </div>
+
   <button class="action-btn" id="startNewOrderBtn">Log Order & Clear</button>
-<small style="display:block; text-align:center; color:#C2C2C2; margin-top:-10px; margin-bottom:20px; font-size: 14px; font-weight: normal;">
-  This button saves the order to history, clears the form, and generates a unique Reference Number.
-</small>
+  <small style="display:block; text-align:center; color:#C2C2C2; margin-top:-10px; margin-bottom:20px; font-size: 12px; font-weight: normal;">
+    This button saves the order to history, clears the form, and generates a unique Reference Number.
+  </small>
 </div>
 
 <div class="panel history-panel">
@@ -290,52 +301,55 @@ td { color: black; border-bottom: 1px solid #eee; }
   
   <div class="summary-container">
     <div class="summary-card"><div>Total Orders</div><span id="summaryTotalOrders">0</span></div>
-    <div class="summary-card"><div>Total Sales</div><span id="summaryTotalSales">₱0.00</span></div>
+    <div class="summary-card"><div>Total Sales</div><span id="summaryTotalSales">0.00</span></div>
     <div class="summary-card"><div>Best Seller</div><span id="summaryBestSeller">None</span></div>
   </div>
 
   <div class="summary-card" style="text-align: left; padding: 20px; width: 100%; box-sizing: border-box; margin-bottom: 20px;">
-    <div style="text-align: center; margin-bottom: 15px; color: #ff6b00; font-size: 12px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">
+    <div style="text-align: center; margin-bottom: 15px; color: #ff6b00; font-size: 10px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">
       Current Inventory / Item Breakdown
     </div>
     <div id="itemBreakdown" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
-      </div>
+    </div>
   </div>
-
-  <button class="action-btn" id="copyTableBtn">⧉ Copy Table</button>
-  <small style="display:block; text-align:center; color:#C2C2C2; margin-top:-10px; margin-bottom:20px; font-size: 14px;">
-    Copies table to clipboard and opens the Sales Log.
-  </small>
 
   <div style="overflow-x:auto;">
     <table class="history-table">
       <thead>
         <tr>
-          <th>Ref#</th><th>Date</th><th>Time</th><th>Summary</th><th>Status</th>
-          <th>Mode</th><th>Name</th><th>Address</th><th>Total</th><th>Orders</th>
-          <th>Notes</th><th>Action</th>
+          <th>Copy</th><th>Receipt</th><th>Total</th><th>Status</th><th>Mode</th><th>Name</th><th>Address</th><th>Orders</th><th>Notes</th><th>Order#</th><th>Action</th>
+          <th style="display:none">Hidden-Date</th><th style="display:none">Hidden-Time</th><th style="display:none">Hidden-Orders-Raw</th>
         </tr>
       </thead>
       <tbody id="historyBox"></tbody>
     </table>
   </div>
+
+  <button class="action-btn" id="copyTableBtn" style="margin-top: 30px;">⧉ Submit Sales Log</button>
+  <small style="display:block; text-align:center; color:#777; margin-top:-10px; margin-bottom:20px; font-size: 12px;">
+    This copies the table to the clipboard and opens the Sales Log. Paste the report into the Sales Log.
+  </small>
 </div>
 
 <button class="action-btn" id="newDayBtn" onclick="startNewDay()">Start a New Day</button>
-<small style="display:block; text-align:center; color:#FFFFFF; margin-top:-10px; margin-bottom:20px; font-size: 14px; font-weight: bold;">
+<small style="display:block; text-align:center; color:#FFFFFF; margin-top:-10px; margin-bottom:20px; font-size: 12px; font-weight: bold;">
   ⚠️ Warning: This button will permanently delete all order history and reset the day.
 </small>
 
 <script>
 const menuData = [
-  {menu:"Pork Steak with rice", code:"PSWR", price:149},
-  {menu:"Fried Chicken with rice", code:"FCWR", price:109},
-  {menu:"Pork Chop with rice", code:"PCWR", price:75},
-  {menu:"Pork Steak no rice", code:"PSNR", price:134},
-  {menu:"Fried Chicken no rice", code:"FCNR", price:94},
-  {menu:"Pork Chop no rice", code:"PCNR", price:60},
-  {menu:"Extra Rice", code:"ERice", price:15},
-  {menu:"Extra Sauce", code:"ESauce", price:15},
+  {menu:"1pc Fried Chicken with Rice", code:"1FCWR", price:62},
+  {menu:"2pc Fried Chicken with Rice", code:"2FCWR", price:109},
+  {menu:"Pork Steak with Rice", code:"PSWR", price:149},
+  {menu:"Pork Chop with Rice", code:"PCWR", price:75},
+  {menu:"1pc Fried Chicken (A la carte)", code:"1FCALC", price:47},
+  {menu:"2pc Fried Chicken (A la carte)", code:"2FCALC", price:94},
+  {menu:"Pork Steak (A la carte)", code:"PSALC", price:134},
+  {menu:"Pork Chop (A la carte)", code:"PCALC", price:60},
+  {menu:"3pc Vegetable Lumpia (A la carte)", code:"3VL", price:30},
+  {menu:"3pc Pork Lumpia (A la carte)", code:"3PL", price:21},
+  {menu:"Extra Rice", code:"EXRice", price:15},
+  {menu:"Extra Sauce", code:"EXSauce", price:15},
 ];
 
 const orderBody = document.getElementById("orderBody");
@@ -345,19 +359,23 @@ const commInp = document.getElementById("communitySelect");
 const blkInp = document.getElementById("blockFloor");
 const lotInp = document.getElementById("lotRoom");
 const addrInp = document.getElementById("customerAddress");
-let orderCounter = parseInt(localStorage.getItem("dukiks_counter")) || 101;
 
 window.onload = () => {
   addOrderRow();
-  if(localStorage.getItem("dukiks_history")) {
-    historyBox.innerHTML = localStorage.getItem("dukiks_history");
+  const saved = localStorage.getItem("dukiks_history");
+  if(saved) {
+    historyBox.innerHTML = saved;
     historyBox.querySelectorAll('tr').forEach(row => {
-      const statusSelect = row.cells[4]?.querySelector('select');
-      const paySelect = row.cells[5]?.querySelector('select');
-      if(statusSelect && statusSelect.getAttribute('data-val')) statusSelect.value = statusSelect.getAttribute('data-val');
-      if(paySelect && paySelect.getAttribute('data-val')) paySelect.value = paySelect.getAttribute('data-val');
-      if(statusSelect) statusSelect.onchange = saveHistory;
-      if(paySelect) paySelect.onchange = saveHistory;
+      const statusSelect = row.cells[3]?.querySelector('select');
+      const paySelect = row.cells[4]?.querySelector('select');
+      if(statusSelect) {
+          statusSelect.value = statusSelect.getAttribute('data-val');
+          statusSelect.onchange = saveHistory;
+      }
+      if(paySelect) {
+          paySelect.value = paySelect.getAttribute('data-val');
+          paySelect.onchange = saveHistory;
+      }
     });
   }
   updateSummary();
@@ -384,7 +402,7 @@ function addOrderRow() {
   tr.innerHTML = `
     <td><select class="item-select" onchange="updateTable()"><option value="">Select</option>${menuData.map(m=>`<option value="${m.code}">${m.menu}</option>`).join('')}</select></td>
     <td><input type="number" value="1" min="1" oninput="updateTable()"></td>
-    <td class="row-total">₱0.00</td>
+    <td class="row-total">0.00</td>
   `;
   orderBody.appendChild(tr);
 }
@@ -397,7 +415,7 @@ function updateTable() {
     const qty = parseInt(row.querySelector("input").value) || 0;
     const item = menuData.find(m => m.code === code);
     const price = item ? item.price * qty : 0;
-    row.querySelector(".row-total").textContent = "₱" + formatPHP(price);
+    row.querySelector(".row-total").textContent = formatPHP(price);
     grandTotal += price;
     if (i === rows.length - 1 && code !== "") addOrderRow();
   });
@@ -405,7 +423,7 @@ function updateTable() {
   if(oldGT) oldGT.remove();
   const gtRow = document.createElement("tr");
   gtRow.id = "grandTotalRow";
-  gtRow.innerHTML = `<td colspan="2" style="text-align:right; font-weight:bold;">Grand Total:</td><td style="color:red; font-weight:bold;">₱${formatPHP(grandTotal)}</td>`;
+  gtRow.innerHTML = `<td colspan="2" style="text-align:right; font-weight:bold;">Grand Total:</td><td style="color:red; font-weight:bold;">${formatPHP(grandTotal)}</td>`;
   orderBody.appendChild(gtRow);
 }
 
@@ -420,13 +438,12 @@ function saveHistory() {
 function updateSummary() {
   const rows = historyBox.querySelectorAll("tr");
   let totalSales = 0;
-  let itemCounts = { "Fried Chicken": 0, "Pork Steak": 0, "Pork Chop": 0 };
+  let itemCounts = { "Fried Chicken": 0, "Pork Steak": 0, "Pork Chop": 0, "Vegetable Lumpia": 0, "Pork Lumpia": 0, "Rice": 0 };
 
   rows.forEach(row => {
-    const priceText = row.cells[8].innerText.replace('₱', '').replace(/,/g, '');
+    const priceText = row.cells[2].innerText.replace(/,/g, '');
     totalSales += parseFloat(priceText) || 0;
-
-    const orderItems = row.cells[9].innerText.split(', ');
+    const orderItems = row.cells[13].innerText.split(', ');
     orderItems.forEach(itemStr => {
       const parts = itemStr.split('x ');
       if(parts.length > 1) {
@@ -438,27 +455,29 @@ function updateSummary() {
           if (name.includes("Fried Chicken")) itemCounts["Fried Chicken"] += qty;
           else if (name.includes("Pork Steak")) itemCounts["Pork Steak"] += qty;
           else if (name.includes("Pork Chop")) itemCounts["Pork Chop"] += qty;
+          else if (name.includes("Vegetable Lumpia")) itemCounts["Vegetable Lumpia"] += qty;
+          else if (name.includes("Pork Lumpia")) itemCounts["Pork Lumpia"] += qty;
+          if (name.includes("with Rice") || name.includes("Extra Rice")) itemCounts["Rice"] += qty;
         }
       }
     });
   });
 
   document.getElementById("summaryTotalOrders").textContent = rows.length;
-  document.getElementById("summaryTotalSales").textContent = "₱" + formatPHP(totalSales);
+  document.getElementById("summaryTotalSales").textContent = formatPHP(totalSales);
   
   let bestItem = "None"; let maxCount = 0;
   for (const [name, count] of Object.entries(itemCounts)) {
-    if (count > maxCount && count > 0) { maxCount = count; bestItem = name; }
+    if (count > maxCount && count > 0 && name !== "Rice") { maxCount = count; bestItem = name; }
   }
   document.getElementById("summaryBestSeller").textContent = bestItem;
 
   const breakdownDiv = document.getElementById("itemBreakdown");
   if(breakdownDiv) {
-    const displayOrder = ["Fried Chicken", "Pork Steak", "Pork Chop"];
+    const displayOrder = ["Fried Chicken", "Pork Steak", "Pork Chop", "Vegetable Lumpia", "Pork Lumpia", "Rice"];
     breakdownDiv.innerHTML = displayOrder.map(name => `
         <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding: 5px 0;">
-          <span style="font-size: 13px; color: #ddd; white-space: nowrap;">${name.toUpperCase()}</span>
-          <span style="color: #ff6b00; font-weight: bold; font-size: 16px;">${itemCounts[name]}</span>
+          <span style="font-size: 11px; color: #ddd; white-space: nowrap;"><span style="color: #ff6b00; font-weight: bold; font-size: 14px; margin-right: 5px;">${itemCounts[name]}</span> ${name.toUpperCase()}</span>
         </div>
       `).join('');
   }
@@ -476,51 +495,61 @@ document.getElementById("startNewOrderBtn").onclick = function() {
       if (!lotInp.value.trim()) { lotInp.classList.add('error-bump'); valid = false; }
   }
   const rows = orderBody.querySelectorAll("tr:not(#grandTotalRow)");
-  let orders = []; let total = 0; let hasItem = false;
+  let ordersCodes = []; let ordersPretty = []; let total = 0; let hasItem = false;
   rows.forEach(r => {
     const code = r.querySelector("select").value;
     const qty = r.querySelector("input").value;
     const item = menuData.find(m => m.code === code);
-    if(item) { orders.push(`${qty}x ${item.code}`); total += item.price * qty; hasItem = true; }
+    if(item) { 
+        ordersCodes.push(`${qty}x ${item.code}`); 
+        ordersPretty.push(`${qty}x ${item.menu}`);
+        total += item.price * qty; 
+        hasItem = true; 
+    }
   });
-  if(!valid || !hasItem) { document.getElementById("validationError").style.display = "block"; return; }
+  
+  if(!valid || !hasItem) { 
+    document.getElementById("validationError").style.display = "block"; 
+    if(!hasItem) document.getElementById("orderTable").classList.add('error-bump');
+    return; 
+  }
   document.getElementById("validationError").style.display = "none";
   
   const now = new Date();
-  const dateCode = (now.getMonth() + 1).toString().padStart(2, '0') + now.getDate().toString().padStart(2, '0') + now.getFullYear().toString().slice(-2);
-  const refNum = `#${dateCode}${orderCounter}`;
+  const month = (now.getMonth() + 1).toString().padStart(2, '0');
+  const day = now.getDate().toString().padStart(2, '0');
+  const year = now.getFullYear();
+  let hours = now.getHours();
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12 || 12;
+  const hStr = hours.toString().padStart(2, '0');
+  const mStr = now.getMinutes().toString().padStart(2, '0');
+  const sStr = now.getSeconds().toString().padStart(2, '0');
+  
+  const refNum = `${month}${day}${year}-${hStr}${mStr}${sStr}${ampm}`;
   let fullAddress = (comm === "Home") ? addrInp.value : `${comm} - Blk ${blkInp.value}, Lot ${lotInp.value}`;
 
   const hRow = document.createElement("tr");
   hRow.innerHTML = `
-    <td style="font-weight:bold; color:#ff6b00;">${refNum}</td>
-    <td>${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()}</td>
-    <td>${now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true})}</td>
-    <td style="text-align:center"><button class="action-btn" style="width:auto; padding:5px 10px; margin:0; font-size:14px;" onclick="copyOrderSummary(this)">Copy Summary</button></td>
+    <td><button class="action-btn" style="width:auto; padding:5px 10px; margin:0; font-size:11px;" onclick="copyOrderSummary(this)">Copy</button></td>
+    <td><button class="action-btn" style="width:auto; padding:5px 10px; margin:0; font-size:11px; background-color:#007bff;" onclick="copyReceipt(this)">Receipt</button></td>
+    <td style="font-weight:bold;">${formatPHP(total)}</td>
     <td><select class="history-select" data-val="Unpaid" onchange="saveHistory()"><option>Unpaid</option><option>Paid</option></select></td>
     <td><select class="history-select" data-val="GCash" onchange="saveHistory()"><option>GCash</option><option>Cash</option><option>Bank Transfer</option><option>Credit Card</option></select></td>
     <td>${nameInp.value}</td>
     <td>${fullAddress}</td>
-    <td style="font-weight:bold;">₱${formatPHP(total)}</td>
-    <td>${orders.join(", ")}</td>
+    <td>${ordersPretty.join("<br>")}</td>
     <td>${document.getElementById("specialInstructions").value || '-'}</td>
+    <td style="font-weight:bold; color:#ff6b00;">${refNum}</td>
     <td style="text-align:center"><button class="del-btn" onclick="deleteRow(this)">🗑️</button></td>
+    <th style="display:none">${month}/${day}/${year}</th>
+    <th style="display:none">${hStr}:${mStr} ${ampm}</th>
+    <th style="display:none">${ordersCodes.join(", ")}</th>
   `;
   historyBox.appendChild(hRow);
-  orderCounter++;
-  localStorage.setItem("dukiks_counter", orderCounter);
   saveHistory();
   
-  // --- START AUTO-COPY ---
-  const summaryAuto = `Order No.: ${refNum}\nDate and time: ${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()} ${now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true})}\nName: ${nameInp.value}\nAddress: ${fullAddress}\nTotal: ₱${formatPHP(total)}\nUnpaid, GCash\n\nOrder/s: \n${orders.map(item => {
-    const p = item.split("x ");
-    const m = menuData.find(menu => menu.code === p[1]);
-    return `${p[0]}x ${m ? m.menu : p[1]}`;
-  }).join("\n")}\n\nSpecial Notes: ${document.getElementById("specialInstructions").value || '-'}`;
-
-  navigator.clipboard.writeText(summaryAuto);
-  window.open("https://www.messenger.com/t/1629578618166443", "_blank");
-  // --- END AUTO-COPY ---
+  copyOrderSummary(hRow.querySelector('button'));
 
   this.textContent = "✅ Logged & Copied!";
   this.classList.add("success-state");
@@ -532,52 +561,22 @@ document.getElementById("startNewOrderBtn").onclick = function() {
   }, 1000);
 };
 
-function deleteRow(btn) { if(confirm("Delete this order?")) { btn.parentElement.parentElement.remove(); saveHistory(); } }
-function startNewDay() { if(confirm("Reset all data?")) { localStorage.clear(); historyBox.innerHTML = ""; orderCounter = 101; updateSummary(); location.reload(); } }
-
-document.getElementById("copyTableBtn").onclick = function() {
-  let text = "";
-  historyBox.querySelectorAll("tr").forEach(r => {
-    // We grab specific cells to match your Google Sheet format:
-    // Ref#, Date, Time, Name, Address, Total, Status, Mode, Orders, Notes
-    const ref    = r.cells[0].innerText;
-    const date   = r.cells[1].innerText;
-    const time   = r.cells[2].innerText;
-    const status = r.cells[4].querySelector('select').value;
-    const mode   = r.cells[5].querySelector('select').value;
-    const name   = r.cells[6].innerText;
-    const addr   = r.cells[7].innerText;
-    const total  = r.cells[8].innerText;
-    const orders = r.cells[9].innerText;
-    const notes  = r.cells[10].innerText;
-
-    const rowData = [ref, date, time, name, addr, total, status, mode, orders, notes];
-    text += rowData.join("\t") + "\n";
-  });
-  
-  navigator.clipboard.writeText(text);
-  window.open("https://docs.google.com/spreadsheets/d/1Y0fxsaI3jva56h42jg9jRq1FS6vmbXmxl5X2e-cc69I/edit?gid=1589209915#gid=1589209915", "_blank");
-  
-  const originalHtml = this.innerHTML;
-  this.innerHTML = "✅ Copied (Sheet Format)";
-  this.classList.add("success-state");
-  setTimeout(() => { this.innerHTML = originalHtml; this.classList.remove("success-state"); }, 2000);
-};
-
 function copyOrderSummary(btn) {
-  const row = btn.parentElement.parentElement;
-  
-  // Mapping for the Copy Summary Button (Visual Layout)
-  const refNum   = row.cells[0].innerText;
-  const dateStr  = row.cells[1].innerText;
-  const timeStr  = row.cells[2].innerText;
-  const status   = row.cells[4].querySelector('select').value;
-  const payMode  = row.cells[5].querySelector('select').value;
-  const name     = row.cells[6].innerText;
-  const location = row.cells[7].innerText;
-  const total    = row.cells[8].innerText;
-  const ordersRaw = row.cells[9].innerText;
-  const notes    = row.cells[10].innerText;
+  const row = btn.closest("tr");
+  const refNum    = row.cells[9].innerText;
+  const dateStr   = row.cells[11].innerText;
+  const timeStr   = row.cells[12].innerText;
+  const name      = row.cells[5].innerText;
+  const addr      = row.cells[6].innerText;
+  const total     = row.cells[2].innerText;
+  const notes     = row.cells[8].innerText;
+  const ordersRaw = row.cells[13].innerText;
+
+  let addrParts = addr.split(" - ");
+  let commCode = addrParts[0].substring(0,3).toUpperCase();
+  let blk = blkInp.value || (addrParts[1] ? addrParts[1].match(/\d+/g)?.[0] : "0") || "0";
+  let lot = lotInp.value || (addrParts[1] ? addrParts[1].match(/\d+/g)?.[1] : "0") || "0";
+  let shortAddr = `${commCode} ${blk}/${lot}`;
 
   const orderCodes = ordersRaw.split(", ");
   const fullOrderNames = orderCodes.map(item => {
@@ -588,20 +587,81 @@ function copyOrderSummary(btn) {
     return `${qty}x ${menuItem ? menuItem.menu : code}`;
   }).join("\n");
 
-  const summary = `Order No.: ${refNum}\nDate and time: ${dateStr} ${timeStr}\nName: ${name}\nAddress: ${location}\nTotal: ${total}\n${status}, ${payMode}\n\nOrder/s: \n${fullOrderNames}\n\nSpecial Notes: ${notes}`;
+  const summary = `${refNum}\n${dateStr} ${timeStr}\nName: ${name}\nAddress: ${addr}\n\n${shortAddr} ₱${total}\n\nOrders:\n${fullOrderNames}\n\nSpecial Notes: ${notes}`;
 
   navigator.clipboard.writeText(summary);
-  window.open("https://www.messenger.com/t/1629578618166443", "_blank");
+  
+  // Try triggering the App protocol directly
+  const messengerUrl = "fb-messenger://user-thread/1629578618166443";
+  const webUrl = "https://www.messenger.com/t/1629578618166443";
+  
+  // Attempt app open, fallback to web if app fails to respond
+  window.location.href = messengerUrl;
+  setTimeout(() => {
+    if (document.hasFocus()) { window.open(webUrl, "_blank"); }
+  }, 500);
+
   const originalText = btn.innerText;
-  btn.innerText = "✅ Copied!";
+  btn.innerText = "✅";
   setTimeout(() => { btn.innerText = originalText; }, 1500);
 }
+
+function copyReceipt(btn) {
+  const row = btn.closest("tr");
+  const total = row.cells[2].innerText;
+  const ordersRaw = row.cells[13].innerText;
+
+  const orderCodes = ordersRaw.split(", ");
+  const fullOrderNames = orderCodes.map(item => {
+    const parts = item.split("x ");
+    const qty = parts[0];
+    const code = parts[1];
+    const menuItem = menuData.find(m => m.code === code);
+    return `${qty}x ${menuItem ? menuItem.menu : code}`;
+  }).join("\n");
+
+  const receipt = `${fullOrderNames}\nTotal Amount: ₱${total}`;
+  
+  navigator.clipboard.writeText(receipt);
+  const originalText = btn.innerText;
+  btn.innerText = "✅";
+  btn.style.backgroundColor = "#28a745";
+  setTimeout(() => { 
+    btn.innerText = originalText; 
+    btn.style.backgroundColor = "#007bff";
+  }, 1500);
+}
+
+function deleteRow(btn) { if(confirm("Delete this order?")) { btn.parentElement.parentElement.remove(); saveHistory(); } }
+function startNewDay() { if(confirm("Reset all data?")) { localStorage.clear(); historyBox.innerHTML = ""; updateSummary(); location.reload(); } }
+
+document.getElementById("copyTableBtn").onclick = function() {
+  let text = "";
+  historyBox.querySelectorAll("tr").forEach(r => {
+    const rowData = [
+      r.cells[9].innerText, r.cells[11].innerText, r.cells[12].innerText, r.cells[5].innerText,
+      r.cells[6].innerText, r.cells[2].innerText, r.cells[3].querySelector('select').value,
+      r.cells[4].querySelector('select').value, r.cells[13].innerText, r.cells[8].innerText
+    ];
+    text += rowData.join("\t") + "\n";
+  });
+  navigator.clipboard.writeText(text);
+  window.open("https://docs.google.com/spreadsheets/d/1Y0fxsaI3jva56h42jg9jRq1FS6vmbXmxl5X2e-cc69I/edit?gid=1589209915#gid=1589209915", "_blank");
+};
 
 function updateClock() {
   const now = new Date();
   const timeDiv = document.getElementById('timePHT');
   const dateDiv = document.getElementById('datePHT');
-  if(timeDiv) timeDiv.textContent = now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true});
+  if(timeDiv) {
+      let hours = now.getHours();
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+      const h = hours.toString().padStart(2, '0');
+      const m = now.getMinutes().toString().padStart(2, '0');
+      const s = now.getSeconds().toString().padStart(2, '0');
+      timeDiv.textContent = `${h}:${m}:${s} ${ampm}`;
+  }
   if(dateDiv) dateDiv.textContent = now.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'2-digit', year:'numeric'});
 }
 setInterval(updateClock, 1000);
@@ -609,8 +669,3 @@ setInterval(updateClock, 1000);
 
 </body>
 </html>
-
-
-
-
-
